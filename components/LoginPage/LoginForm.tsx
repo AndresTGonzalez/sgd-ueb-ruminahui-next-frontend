@@ -1,7 +1,21 @@
+"use client";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { useToast } from "@/components/ui/use-toast";
+
 
 export default function LoginForm() {
+  const { toast } = useToast();
+
+  const handleLogin = () => {
+    toast({
+      title: "Bienvenido",
+      description: "admin@admin.com",
+      variant: "warning",
+    });
+  };
+
   return (
     <div className=" flex flex-col justify-between items-center h-96 w-fit px-12 py-8 bg-transparent">
       <div className="flex flex-col space-y-2">
@@ -19,7 +33,11 @@ export default function LoginForm() {
         </p>
         <Input className="w-96" type="email" placeholder="Email" />
         <Input className="w-96" type="password" placeholder="********" />
-        <Button className="w-96 mt-4 bg-blue-950 hover:bg-blue-800" size={"lg"}>
+        <Button
+          className="w-96 mt-4 bg-blue-950 hover:bg-blue-800"
+          size={"lg"}
+          onClick={handleLogin}
+        >
           Iniciar sesión
         </Button>
       </div>
