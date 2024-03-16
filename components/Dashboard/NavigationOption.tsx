@@ -3,7 +3,7 @@
 import { Button } from "../ui/button";
 import { NavigationItem } from "@/models/uiModels";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function NavigationOption({
   option,
@@ -11,16 +11,19 @@ export default function NavigationOption({
   option: NavigationItem;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
+
+  const isSelected = pathname === option.href;
 
   const handleNavigation = () => {
-    console.log("option.href", option.href);
     router.push(option.href);
   };
 
   return (
     <Button
-      className="w-full text-white mb-2 h-14 text-base font-light flex flex-row items-center justify-start text-left"
-      size={"lg"}
+      className={`w-full h-12 flex flex-row items-center space-x-3 hover:bg-blue-900 hover:text-white text-white ${
+        isSelected ? "bg-blue-900" : ""
+      }`}
       variant={"ghost"}
       key={option.label}
       onClick={handleNavigation}

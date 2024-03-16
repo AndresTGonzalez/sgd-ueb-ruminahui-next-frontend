@@ -12,14 +12,16 @@ import {
 
 export default function User() {
   return (
-    <div className="w-full h-fit py-4 px-5 flex flex-row justify-around items-center">
-      <Avatar>
-        {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-        <AvatarFallback>AD</AvatarFallback>
-      </Avatar>
-      <div className="flex flex-col text-white text-sm">
-        <span>Administrador</span>
-        <span>admin@admin.com</span>
+    <div className="w-full h-fit py-4 px-5 flex flex-row justify-between items-center">
+      <div className="flex flex-row items-center space-x-3">
+        <Avatar className="w-fit h-fit">
+          {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+          <AvatarFallback className="text-xs p-1">AD</AvatarFallback>
+        </Avatar>
+        <div className="flex flex-col text-white text-xs">
+          <span>Administrador</span>
+          <span>admin@admin.com</span>
+        </div>
       </div>
       <div>
         <DropdownMenu>
