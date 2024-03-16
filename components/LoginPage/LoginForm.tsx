@@ -11,9 +11,6 @@ export default function LoginForm() {
         <p className="font-extralight text-lg text-center">
           al Sistema de Gestión Docentes de la Unidad Educativa "Rumiñahui"
         </p>
-        {/* <p className="font-extralight text-sm text-center">
-          Ingrese su usuario y contraseña para iniciar sesión
-        </p> */}
       </div>
 
       <div className="flex flex-col space-y-5">
