@@ -21,7 +21,7 @@ export default function NavigationOption({
 
   return (
     <Button
-      className={`w-full h-12 flex flex-row items-center space-x-3 hover:bg-blue-900 hover:text-white text-white ${
+      className={`w-full h-12 flex flex-row items-center justify-start space-x-3 rounded-none hover:bg-blue-900 hover:text-white text-white ${
         isSelected ? "bg-blue-900" : ""
       }`}
       variant={"ghost"}
