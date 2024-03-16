@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { IoIosLogOut } from "react-icons/io";
 import { Avatar, AvatarFallback } from "../ui/avatar";
@@ -25,7 +27,11 @@ export default function User() {
             <ChevronDownIcon className="h-4 w-4 text-white" />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("Cerrar sesión");
+              }}
+            >
               <div className="flex flex-row space-x-2">
                 <span className="ml-2">Cerrar sesión</span>
                 <IoIosLogOut className="h-5 w-5 text-red-800" />

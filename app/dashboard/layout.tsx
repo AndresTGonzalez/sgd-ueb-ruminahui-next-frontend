@@ -8,7 +8,7 @@ export default function DashboardLayout({
   return (
     <div className="w-screen h-screen flex flex-row">
       <Sidenav />
-      <div>{children}</div>
+      <div className="flex-grow">{children}</div>
     </div>
   );
 }
