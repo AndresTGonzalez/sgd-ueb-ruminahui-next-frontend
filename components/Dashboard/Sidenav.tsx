@@ -1,16 +1,22 @@
 import Logo from "../Misc/Logo";
+import NavigationOption from "./NavigationOption";
 import User from "./User";
+import { navigationOptions } from "@/utils/navigationOptions";
 
 export default function Sidenav() {
   return (
     <aside className="w-72 h-full flex flex-col justify-between bg-blue-950">
       <div>
-        {/* Logo de la institucion */}
-        <Logo size={100} />
+        <div>
+          <Logo size={100} />
+        </div>
+        <div className="mt-2">
+          {navigationOptions.map((option) => (
+            <NavigationOption option={option} key={option.label} />
+          ))}
+        </div>
       </div>
-      <div>{/* Opciones del menu */}</div>
       <div>
-        {/* Icono del usuario */}
         <User />
       </div>
     </aside>
