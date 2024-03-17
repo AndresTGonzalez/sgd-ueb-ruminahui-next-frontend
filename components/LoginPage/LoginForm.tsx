@@ -2,17 +2,12 @@
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useToast } from "@/components/ui/use-toast";
-
+import { toast } from "sonner";
 
 export default function LoginForm() {
-  const { toast } = useToast();
-
   const handleLogin = () => {
-    toast({
-      title: "Bienvenido",
-      description: "admin@admin.com",
-      variant: "warning",
+    toast.error("Bienvenido", {
+      description: "My description",
     });
   };
 
