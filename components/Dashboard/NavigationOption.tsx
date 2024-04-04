@@ -13,7 +13,8 @@ export default function NavigationOption({
   const router = useRouter();
   const pathname = usePathname();
 
-  const isSelected = pathname === option.href;
+  const isSelected =
+    pathname.includes(option.href) && option.href !== "/dashboard";
 
   const handleNavigation = () => {
     router.push(option.href);
