@@ -1,12 +1,11 @@
 import { NavigationItem } from "@/models/uiModels";
 
 import {
-  AcademicCapIcon,
   CalendarDaysIcon,
   HomeIcon,
   BuildingOfficeIcon,
-  KeyIcon,
   UserGroupIcon,
+  DocumentIcon,
 } from "@heroicons/react/24/solid";
 
 export const navigationOptions: NavigationItem[] = [
@@ -21,19 +20,14 @@ export const navigationOptions: NavigationItem[] = [
     href: "/dashboard/asistencia",
   },
   {
-    label: "Docentes",
-    icon: <AcademicCapIcon width={20} />,
-    href: "/dashboard/docentes",
-  },
-  {
-    label: "Administrativos",
-    icon: <KeyIcon width={20} />,
-    href: "/dashboard/administrativos",
-  },
-  {
-    label: "Logística",
+    label: "Personal",
     icon: <UserGroupIcon width={20} />,
-    href: "/dashboard/logistica",
+    href: "/dashboard/personal",
+  },
+  {
+    label: "Justificaciones",
+    icon: <DocumentIcon width={20} />,
+    href: "/dashboard/justificaciones",
   },
   {
     label: "Sedes",

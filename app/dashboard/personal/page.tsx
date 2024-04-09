@@ -4,7 +4,11 @@ import { DataTable } from "./DataTable";
 async function getData(): Promise<Campus[]> {
   // Fetch data from your API here.
   return [
-    { id: "1", name: "Sede 1asdfasdfsadfasdfdasfadsfsdafsvdsafadsfasdfadsfsadfadsfsadfsdafasd", address: "Calle 1" },
+    {
+      id: "1",
+      name: "Sede 1asdfasdfsadfasdfdasfadsfsdafsvdsafadsfasdfadsfsadfadsfsadfsdafasd",
+      address: "Calle 1",
+    },
     { id: "2", name: "Sede 2", address: "Calle 2asdfasdfadsfadsfasdfadsfadsf" },
     { id: "3", name: "Sede 3", address: "Calle 3" },
     // ...
