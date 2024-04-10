@@ -7,7 +7,7 @@ export type User = {
 };
 
 // Esquema de validación
-export const UserSchema = z.object({
-  email: z.string().email("Por favor, ingrese un correo electrónico válido"),
-  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+export const userSchema = z.object({
+  email: z.string().email("Ingrese un correo electrónico válido"),
+  password: z.string().min(5, "Ingrese una contraseña válida"),
 });

@@ -10,12 +10,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { signOut } from "@/auth/signOut";
+
 export default function User() {
   return (
     <div className="w-full h-fit py-4 px-5 flex flex-row justify-between items-center">
       <div className="flex flex-row items-center space-x-3">
         <Avatar className="w-fit h-fit">
-          {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
           <AvatarFallback className="text-xs p-1">AD</AvatarFallback>
         </Avatar>
         <div className="flex flex-col text-white text-xs">
@@ -30,8 +31,8 @@ export default function User() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem
-              onClick={() => {
-                console.log("Cerrar sesión");
+              onClick={async () => {
+                await signOut();
               }}
             >
               <div className="flex flex-row space-x-2">

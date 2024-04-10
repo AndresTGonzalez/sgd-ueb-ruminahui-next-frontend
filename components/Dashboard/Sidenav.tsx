@@ -5,7 +5,7 @@ import { navigationOptions } from "@/utils/navigationOptions";
 
 export default function Sidenav() {
   return (
-    <aside className="w-60 h-full flex flex-col justify-between bg-blue-950">
+    <aside className="w-60 h-full flex flex-col justify-between bg-[#0F172A]">
       <div>
         <div>
           <Logo size={100} />
