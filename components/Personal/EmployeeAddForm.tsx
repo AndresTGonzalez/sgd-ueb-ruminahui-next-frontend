@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,8 +13,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  getProvinces,
+  getCitiesByProvince,
+  getGenders,
+  getCivilStatus,
+} from "@/lib/selectOptions";
+import { City, CivilStatus, Gender, Province } from "@/models/apiModels";
 
 export default function EmployeeAddForm() {
+  // Provincias
+  const [provinces, setProvinces] = useState<Province[]>([]);
+  // Ciudades
+  const [cities, setCities] = useState<City[]>([]);
+  // Generos
+  const [genders, setGenders] = useState<Gender[]>([]);
+  // Estados civiles
+  const [maritalStatuses, setMaritalStatuses] = useState<CivilStatus[]>([]);
+
+  // Precargar provincias, generos y estados civiles
+  useEffect(() => {
+    getProvinces().then((data) => setProvinces(data));
+    getCivilStatus().then((data) => setMaritalStatuses(data));
+    getGenders().then((data) => setGenders(data));
+  }, []);
+
+  // Manejar cambio de provincia
+  const handleProvinceChange = async (value: string) => {
+    const provinceId = parseInt(value);
+    const cities = await getCitiesByProvince(provinceId);
+    setCities(cities);
+  };
+
   return (
     <div>
       <div className="py-7 w-full grid grid-cols-1 gap-5">
@@ -26,14 +58,16 @@ export default function EmployeeAddForm() {
           {/* Genero */}
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="gender">Género:</Label>
-            {/* <Input type="document" id="document" placeholder="18xxxxxxxx" /> */}
-            <Select name="gender">
+            <Select name="gender" onValueChange={handleProvinceChange}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Género" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="masculino">Masculino</SelectItem>
-                <SelectItem value="femenino">Femenino</SelectItem>
+                {genders.map((genders) => (
+                  <SelectItem key={genders.id} value={genders.id.toString()}>
+                    {genders.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -74,17 +108,20 @@ export default function EmployeeAddForm() {
           {/* Estado civil e hijos */}
           <div className="w-full grid grid-cols-2 gap-5">
             <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="civilStatus">Estado civil:</Label>
-              <Select>
-                <SelectTrigger className="w-full" id="civilStatus">
-                  <SelectValue />
+              <Label htmlFor="maritalStatus">Estado civil:</Label>
+              <Select name="maritalStatus" onValueChange={handleProvinceChange}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Estado civil" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="soltero">Soltero/a</SelectItem>
-                  <SelectItem value="casado">Casado/a</SelectItem>
-                  <SelectItem value="union">Unión de hecho</SelectItem>
-                  <SelectItem value="divorciado">Divorciado/a</SelectItem>
-                  <SelectItem value="viudo">Viudo/a</SelectItem>
+                  {maritalStatuses.map((maritalStatus) => (
+                    <SelectItem
+                      key={maritalStatus.id}
+                      value={maritalStatus.id.toString()}
+                    >
+                      {maritalStatus.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -95,36 +132,35 @@ export default function EmployeeAddForm() {
           </div>
         </div>
         <div className="w-full grid grid-cols-2 gap-20">
-          {/* Terceros campos: Telefono y Correo */}
-          {/* Telefono */}
+          {/* Provincia */}
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="province">Provincia:</Label>
-            <Select>
-              <SelectTrigger className="w-full" id="province">
-                <SelectValue />
+            <Select name="province" onValueChange={handleProvinceChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Provincia" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="soltero">Soltero/a</SelectItem>
-                <SelectItem value="casado">Casado/a</SelectItem>
-                <SelectItem value="union">Unión de hecho</SelectItem>
-                <SelectItem value="divorciado">Divorciado/a</SelectItem>
-                <SelectItem value="viudo">Viudo/a</SelectItem>
+                {provinces.map((province) => (
+                  <SelectItem key={province.id} value={province.id.toString()}>
+                    {province.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
-          {/* Correo */}
+          {/* Ciudades */}
           <div className="grid w-full items-center gap-1.5">
             <Label htmlFor="city">Ciudad:</Label>
-            <Select>
-              <SelectTrigger className="w-full" id="city">
-                <SelectValue />
+            <Select name="city">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Ciudad" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="soltero">Soltero/a</SelectItem>
-                <SelectItem value="casado">Casado/a</SelectItem>
-                <SelectItem value="union">Unión de hecho</SelectItem>
-                <SelectItem value="divorciado">Divorciado/a</SelectItem>
-                <SelectItem value="viudo">Viudo/a</SelectItem>
+                {cities.map((city) => (
+                  <SelectItem key={city.id} value={city.id.toString()}>
+                    {city.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

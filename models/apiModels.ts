@@ -1,5 +1,27 @@
 import { z } from "zod";
 
+export type Province = {
+  id: number;
+  name: string;
+};
+
+export type City = {
+  id: number;
+  name: string;
+  provinceId: number;
+};
+
+export type Gender = {
+  id: number;
+  name: string;
+};
+
+export type CivilStatus = {
+  id: number;
+  name: string;
+};
+
+// Usuario
 // Esquema base
 export type User = {
   email: string;

@@ -17,11 +17,10 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { encrypt } from "@/utils/crypto";
-import { User, userSchema } from "@/models/userModel";
+import { User, userSchema } from "@/models/apiModels";
 
 import { signIn } from "@/auth/signIn";
 import { getSessionData } from "@/auth/getSession";
-
 
 const onSubmit = async (formData: z.infer<typeof userSchema>) => {
   const user: User = {
