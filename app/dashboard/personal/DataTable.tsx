@@ -51,6 +51,11 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    defaultColumn: {
+      size: 10, //starting column size
+      minSize: 5, //enforced during column resizing
+      maxSize: 50, //enforced during column resizing
+    },
     state: {
       sorting,
       columnFilters,

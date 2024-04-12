@@ -1,26 +1,18 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Control, FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 
 import { encrypt } from "@/utils/crypto";
 import { User, userSchema } from "@/models/apiModels";
 
 import { signIn } from "@/auth/signIn";
 import { getSessionData } from "@/auth/getSession";
+import InputFormField from "../Misc/InputFormField";
 
 const onSubmit = async (formData: z.infer<typeof userSchema>) => {
   const user: User = {
@@ -46,43 +38,19 @@ export default function LoginForm() {
     <div className="px-10">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
+          <InputFormField
+            control={form.control as unknown as Control<FieldValues>}
             name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="usuario@mail.com"
-                    className="lg:w-96 w-80"
-                    type="email"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>Ingrese su correo electrónico</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            formLabel="Email"
+            type="email"
+            placeholder="usuario@mail.com"
           />
-          <FormField
-            control={form.control}
+          <InputFormField
+            control={form.control as unknown as Control<FieldValues>}
             name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Contraseña</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="********"
-                    className="lg:w-96 w-80"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>Ingrese su contraseña</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            formLabel="Contraseña"
+            type="password"
+            placeholder="********"
           />
           <Button variant={"default"} type="submit" className="lg:w-96 w-80">
             Iniciar sesión

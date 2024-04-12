@@ -1,6 +1,7 @@
 "use server";
 
 import { getSessionData } from "@/auth/getSession";
+import { SelectorOption } from "@/models/apiModels";
 
 const host = process.env.HOST || "";
 
@@ -26,7 +27,7 @@ export async function getCitiesByProvince(provinceId: number) {
   return data;
 }
 
-export async function getGenders() {
+export async function getGenders(): Promise<SelectorOption[]> {
   const session = await getSessionData();
   const response = await fetch(`${host}/api/genders`, {
     headers: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,35 +14,56 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
+import { Employee } from "@/models/apiModels";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Campus = {
-  id: string;
-  name: string;
-  address: string;
-};
+const columnHelper = createColumnHelper<Employee>();
 
-export const columns: ColumnDef<Campus>[] = [
+export const columns: ColumnDef<Employee>[] = [
   {
-    accessorKey: "name",
-    size: 20,
+    accessorKey: "identificationCard",
+    header: "Cédula",
+    enableResizing: false, //disable resizing for just this column
+    size: 200, //starting column size
+  },
+  {
+    accessorKey: "names",
+    enableResizing: true,
+    size: 40,
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nombre
-          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex flex-row items-center">
+          <h2>Nombres</h2>
+          <Button
+            variant="ghost"
+            size={"icon"}
+            className="ml-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowsUpDownIcon className="h-4 w-4" />
+          </Button>
+        </div>
       );
     },
   },
   {
-    accessorKey: "address",
-    header: "Dirección",
-    size: 500,
+    accessorKey: "lastNames",
+    enableResizing: true,
+    size: 40,
+    header: ({ column }) => {
+      return (
+        <div className="flex flex-row items-center">
+          <h2>Apellidos</h2>
+          <Button
+            variant="ghost"
+            size={"icon"}
+            className="ml-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowsUpDownIcon className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "actions",
@@ -57,11 +78,13 @@ export const columns: ColumnDef<Campus>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {/* <DropdownMenuLabel>Opciones</DropdownMenuLabel> */}
-            <DropdownMenuItem onClick={
-              () => {
+            <DropdownMenuItem
+              onClick={() => {
                 console.log("Edit", row.original.id);
-              }
-            }>Modificar</DropdownMenuItem>
+              }}
+            >
+              Modificar
+            </DropdownMenuItem>
             <DropdownMenuItem>Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
