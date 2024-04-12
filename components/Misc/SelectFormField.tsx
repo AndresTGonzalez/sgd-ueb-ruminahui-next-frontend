@@ -41,7 +41,6 @@ export default function SelectFormField({
   useEffect(() => {
     if (options) {
       setItems(options);
-      console.log(options);
     } else if (fetchItems) {
       fetchItems().then((data) => setItems(data));
     }

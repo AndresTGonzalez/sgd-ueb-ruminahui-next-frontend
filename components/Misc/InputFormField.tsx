@@ -32,8 +32,49 @@ export default function InputFormField({
         <FormItem>
           <FormLabel>{formLabel}</FormLabel>
           <FormControl>
-            <Input type={type} placeholder={placeholder} {...field} />
+            {type === "date" ? ( // Verifica si el tipo es "date"
+              <Input
+                type={type}
+                placeholder={placeholder}
+                onChange={(e) => {
+                  // Convierte el valor del input a un objeto Date
+                  const dateValue = new Date(e.target.value);
+                  // Llama a field.onChange con el valor actualizado
+                  field.onChange(dateValue);
+                }}
+              />
+            ) : (
+              // Si no es "date", muestra el input normalmente
+              <Input
+                type={type}
+                placeholder={placeholder}
+                onChange={(e) => {
+                  // Si el tipo es "number", convierte el valor a un número
+                  const value =
+                    type === "number"
+                      ? parseFloat(e.target.value)
+                      : e.target.value;
+                  // Llama a field.onChange con el valor actualizado
+                  field.onChange(value);
+                }}
+              />
+            )}
           </FormControl>
+          {/* <FormControl>
+            <Input
+              type={type}
+              placeholder={placeholder}
+              onChange={(e) => {
+                // Si el tipo es "number", convierte el valor a un número
+                const value =
+                  type === "number"
+                    ? parseFloat(e.target.value)
+                    : e.target.value;
+                // Llama a field.onChange con el valor actualizado
+                field.onChange(value);
+              }}
+            />
+          </FormControl> */}
           <FormMessage />
         </FormItem>
       )}
