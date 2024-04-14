@@ -2,8 +2,7 @@
 
 import { getSessionData } from "@/auth/getSession";
 import { SelectorOption } from "@/models/apiModels";
-
-const host = process.env.HOST || "";
+import { host } from "./constants";
 
 export async function getProvinces() {
   const session = await getSessionData();

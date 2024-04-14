@@ -1,18 +1,42 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { Separator } from "@/components/ui/separator";
 import { UserIcon } from "@heroicons/react/24/solid";
 import EmployeeAddForm from "@/components/Personal/EmployeeAddForm";
+import { Employee } from "@/models/apiModels";
+import { getEmployee } from "@/lib/employeeAPIActions";
 
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
 
-  const handleCancel = () => {
-    router.replace("/dashboard/personal");
-  };
+  const [employee, setEmployee] = useState<Employee>();
+
+  useEffect(() => {
+    if (params.id !== "0") {
+      getEmployee(parseInt(params.id)).then((data) => {
+        // setEmployee(data);
+        console.log(data);
+        setEmployee(data);
+      });
+    } else {
+      setEmployee({
+        identificationCard: "",
+        names: "",
+        lastNames: "",
+        phone: "",
+        email: "",
+        birthdate: new Date(),
+        childrens: 0,
+        address: "",
+        genderId: 0,
+        maritalStatusId: 0,
+        cityId: 0,
+      });
+    }
+  }, []);
 
   return (
     <div className="w-full h-full container flex flex-col justify-between mx-auto py-10">
@@ -30,7 +54,7 @@ export default function Page({ params }: { params: { id: string } }) {
           </div>
           <Separator />
           {/* Inicia la parte del formulario */}
-          <EmployeeAddForm />
+          <EmployeeAddForm employee={employee!} />
         </div>
       </div>
     </div>

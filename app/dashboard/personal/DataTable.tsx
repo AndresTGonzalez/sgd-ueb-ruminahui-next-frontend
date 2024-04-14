@@ -51,11 +51,6 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    defaultColumn: {
-      size: 10, //starting column size
-      minSize: 5, //enforced during column resizing
-      maxSize: 50, //enforced during column resizing
-    },
     state: {
       sorting,
       columnFilters,
@@ -71,9 +66,9 @@ export function DataTable<TData, TValue>({
       <div className="flex flex-row items-center justify-between py-4">
         <Input
           placeholder="Filtrar personal..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("names")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("names")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

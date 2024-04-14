@@ -48,6 +48,7 @@ export default function InputFormField({
               <Input
                 type={type}
                 placeholder={placeholder}
+                value={field.value}
                 onChange={(e) => {
                   // Si el tipo es "number", convierte el valor a un número
                   const value =
@@ -60,21 +61,6 @@ export default function InputFormField({
               />
             )}
           </FormControl>
-          {/* <FormControl>
-            <Input
-              type={type}
-              placeholder={placeholder}
-              onChange={(e) => {
-                // Si el tipo es "number", convierte el valor a un número
-                const value =
-                  type === "number"
-                    ? parseFloat(e.target.value)
-                    : e.target.value;
-                // Llama a field.onChange con el valor actualizado
-                field.onChange(value);
-              }}
-            />
-          </FormControl> */}
           <FormMessage />
         </FormItem>
       )}

@@ -1,6 +1,13 @@
 "use client";
 
-import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { deleteEmployee } from "@/lib/employeeAPIActions";
+
+import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
+
+import { ColumnDef } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,8 +22,6 @@ import {
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
 import { Employee } from "@/models/apiModels";
-
-const columnHelper = createColumnHelper<Employee>();
 
 export const columns: ColumnDef<Employee>[] = [
   {
@@ -69,25 +74,44 @@ export const columns: ColumnDef<Employee>[] = [
     accessorKey: "actions",
     header: "",
     cell: ({ row }) => {
+      const [open, setOpen] = useState(false);
+      const router = useRouter();
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"secondary"} size={"icon"}>
-              <EllipsisVerticalIcon width={20} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {/* <DropdownMenuLabel>Opciones</DropdownMenuLabel> */}
-            <DropdownMenuItem
-              onClick={() => {
-                console.log("Edit", row.original.id);
-              }}
-            >
-              Modificar
-            </DropdownMenuItem>
-            <DropdownMenuItem>Eliminar</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"secondary"} size={"icon"}>
+                <EllipsisVerticalIcon width={20} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onClick={() => {
+                  // console.log("Edit", row.original.id);
+                  router.push(`/dashboard/personal/${row.original.id}`);
+                }}
+              >
+                Modificar
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                Eliminar
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DeleteAlertDialog
+            open={open}
+            handleEliminate={async () => {
+              await deleteEmployee(row.original.id!);
+              setOpen(false);
+            }}
+            title="Eliminar empleado"
+            message="¿Está seguro que desea eliminar este empleado?"
+          />
+        </>
       );
     },
   },

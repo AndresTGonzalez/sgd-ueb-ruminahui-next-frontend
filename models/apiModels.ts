@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { validateEcuadorianID } from "@/utils/identificationCardValidation";
 
 export type SelectorOption = {
   id: number;
@@ -32,7 +33,7 @@ export const userSchema = z.object({
 });
 
 export interface Employee {
-  id: number;
+  id?: number;
   identificationCard: string;
   names: string;
   lastNames: string;
@@ -42,12 +43,11 @@ export interface Employee {
   childrens: number;
   address: string;
   genderId: number;
-  gender: Gender;
+  gender?: Gender;
   maritalStatusId: number;
-  maritalStatus: MaritalStatus;
+  maritalStatus?: MaritalStatus;
   cityId: number;
-  city: City;
-  getName(): string; // Método para obtener el nombre completo
+  city?: City;
 }
 
 // Implementación del método getName
@@ -57,7 +57,9 @@ export function getName(this: Employee): string {
 
 // Esquema de validación
 export const employeeSchema = z.object({
-  identificationCard: z.string().min(5, "Ingrese un número de cédula válido"),
+  identificationCard: z.string().refine(validateEcuadorianID, {
+    message: "Ingrese un número de cédula válido",
+  }),
   names: z.string().min(3, "Ingrese un nombre válido"),
   lastNames: z.string().min(3, "Ingrese un apellido válido"),
   phone: z.string().min(8, "Ingrese un número de teléfono válido"),

@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "../ui/form";
@@ -12,7 +15,7 @@ import {
   getCivilStatus,
 } from "@/lib/selectOptionsAPI";
 
-import { City, employeeSchema } from "@/models/apiModels";
+import { City, employeeSchema, Employee } from "@/models/apiModels";
 
 import { Control, FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,8 +25,14 @@ import InputFormField from "../Misc/InputFormField";
 import SelectFormField from "../Misc/SelectFormField";
 import TextAreaFormField from "../Misc/TextAreaFormField";
 
-export default function EmployeeAddForm() {
+import { createEmployee } from "@/lib/employeeAPIActions";
+
+export default function EmployeeAddForm({ employee }: { employee: Employee }) {
+  
+  const router = useRouter();
+
   const [cities, setCities] = useState<City[]>([]);
+
 
   const handleProvinceChange = async (value: string) => {
     const provinceId = parseInt(value);
@@ -35,13 +44,30 @@ export default function EmployeeAddForm() {
   const form = useForm<z.infer<typeof employeeSchema>>({
     resolver: zodResolver(employeeSchema),
     defaultValues: {
-      birthdate: new Date(),
+      // identificationCard: employee!.identificationCard,
     },
   });
 
   const onSubmit = async (formData: z.infer<typeof employeeSchema>) => {
-    console.log("Form data:");
-    console.log(formData);
+    const newEmployee: Employee = {
+      identificationCard: formData.identificationCard,
+      names: formData.names,
+      lastNames: formData.lastNames,
+      phone: formData.phone,
+      email: formData.email,
+      birthdate: formData.birthdate,
+      childrens: formData.childrens,
+      address: formData.address,
+      genderId: formData.genderId,
+      maritalStatusId: formData.maritalStatusId,
+      cityId: formData.cityId,
+    };
+
+    const response = await createEmployee(newEmployee);
+    if (response) {
+      toast.success("Empleado registrado exitosamente");
+      router.push("/dashboard/personal");
+    }
   };
 
   return (
