@@ -1,10 +1,10 @@
 import { getSessionData } from "@/auth/getSession";
 import { Employee } from "@/models/apiModels";
-import { host } from "./constants";
+import { personalEndpoint } from "./constants";
 
 export async function getEmployees() {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/employees`, {
+  const response = await fetch(personalEndpoint, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
@@ -15,7 +15,7 @@ export async function getEmployees() {
 
 export async function getEmployee(id: number) {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/employees/${id}`, {
+  const response = await fetch(`${personalEndpoint}/${id}`, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
@@ -25,10 +25,8 @@ export async function getEmployee(id: number) {
 }
 
 export async function createEmployee(employee: Employee) {
-  console.log("Host" + host);
-  console.log("se ejecuta");
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/employees`, {
+  const response = await fetch(personalEndpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -42,7 +40,7 @@ export async function createEmployee(employee: Employee) {
 
 export async function updateEmployee(employee: Employee) {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/employees/${employee.id}`, {
+  const response = await fetch(`${personalEndpoint}/${employee.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -56,7 +54,7 @@ export async function updateEmployee(employee: Employee) {
 
 export async function deleteEmployee(id: number) {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/employees/${id}`, {
+  const response = await fetch(`${personalEndpoint}/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${session}`,

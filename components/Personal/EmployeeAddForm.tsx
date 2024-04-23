@@ -13,6 +13,9 @@ import {
   getCitiesByProvince,
   getGenders,
   getCivilStatus,
+  getFunctions,
+  getLaboralRegimes,
+  getLaboralRelations,
 } from "@/lib/selectOptionsAPI";
 
 import { City, employeeSchema, Employee } from "@/models/apiModels";
@@ -27,18 +30,20 @@ import TextAreaFormField from "../Misc/TextAreaFormField";
 
 import { createEmployee } from "@/lib/employeeAPIActions";
 
-export default function EmployeeAddForm({ employee }: { employee: Employee }) {
-  
+export default function EmployeeAddForm() {
   const router = useRouter();
 
   const [cities, setCities] = useState<City[]>([]);
-
 
   const handleProvinceChange = async (value: string) => {
     const provinceId = parseInt(value);
     getCitiesByProvince(provinceId).then((data) => {
       setCities(data);
     });
+  };
+
+  const handleCancel = () => {
+    router.replace("/dashboard/personal");
   };
 
   const form = useForm<z.infer<typeof employeeSchema>>({
@@ -71,10 +76,11 @@ export default function EmployeeAddForm({ employee }: { employee: Employee }) {
   };
 
   return (
-    <div className="w-full h-full flex flex-col pb-10">
+    <div className="w-full h-full flex flex-col px-8">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="py-7 w-full grid grid-cols-1 gap-5">
+            <h3 className="text-lg font-light">Datos personales:</h3>
             <div className="w-full grid grid-cols-2 gap-20">
               {/* Cedula */}
               <InputFormField
@@ -179,9 +185,56 @@ export default function EmployeeAddForm({ employee }: { employee: Employee }) {
                 placeholder="Dirección"
               />
             </div>
-            <div className="w-full flex flex-row items-center justify-end">
-              <Button type="submit" variant={"success"} className="w-52">
-                Registrar
+            <h3 className="text-lg font-light">Datos institucionales:</h3>
+            <div className="w-full grid grid-cols-2 gap-20">
+              {/* Funcion */}
+              <SelectFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="functionId"
+                formLabel="Función"
+                fetchItems={getFunctions}
+                placeholder="Función"
+              />
+              {/* Ciudades */}
+              <SelectFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="laboralRegimeId"
+                formLabel="Régimen laboral"
+                fetchItems={getLaboralRegimes}
+                placeholder="Régimen laboral"
+              />
+            </div>
+            <div className="w-full grid grid-cols-2 gap-20">
+              {/* Relacion laboral */}
+              <SelectFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="functionId"
+                formLabel="Relación laboral"
+                fetchItems={getLaboralRelations}
+                placeholder="Relación laboral"
+              />
+              {/* Ciudades */}
+              <SelectFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="laboralRegimeId"
+                formLabel="Régimen laboral"
+                fetchItems={getLaboralRegimes}
+                placeholder="Régimen laboral"
+              />
+            </div>
+            {/* <div className="w-full flex flex-row items-center justify-end mt-8">
+              
+            </div> */}
+            <div className="w-full flex flex-row space-x-4 justify-end mt-10">
+              <Button
+                className="w-36"
+                variant="destructive"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </Button>
+              <Button type="submit" variant={"success"} className="w-36">
+                Guardar
               </Button>
             </div>
           </div>

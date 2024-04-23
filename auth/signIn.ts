@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { User } from "@/models/userModel";
 
 export async function signIn(user: User): Promise<boolean> {
-  const host: string = process.env.HOST || "";
+  const host: string = process.env.HOST || "http://localhost:8000";
   const url = `${host}/api/auth/signIn`;
   const response = await fetch(url, {
     method: "POST",

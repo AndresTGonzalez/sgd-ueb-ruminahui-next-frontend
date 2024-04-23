@@ -12,6 +12,9 @@ export type City = SelectorOption & {
   provinceId: number;
 };
 
+export type functionType = SelectorOption;
+export type laboralRegime = SelectorOption;
+export type laboralRelation = SelectorOption;
 export type Gender = SelectorOption;
 
 export type MaritalStatus = {

@@ -6,9 +6,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-screen h-screen flex flex-row ">
+    <div className="w-screen h-screen flex flex-row">
       <Sidenav />
-      <div className="flex-grow overflow-y-auto overflow-x-hidden">
+      <div className="flex-grow overflow-y-auto">
         {children}
       </div>
     </div>
