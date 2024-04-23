@@ -80,3 +80,14 @@ export async function getLaboralRelations(): Promise<SelectorOption[]> {
   const data = await response.json();
   return data;
 }
+
+export async function getCategories(): Promise<SelectorOption[]> {
+  const session = await getSessionData();
+  const response = await fetch(`${host}/api/categories`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}

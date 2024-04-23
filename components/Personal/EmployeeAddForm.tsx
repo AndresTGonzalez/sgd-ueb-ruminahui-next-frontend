@@ -16,6 +16,7 @@ import {
   getFunctions,
   getLaboralRegimes,
   getLaboralRelations,
+  getCategories,
 } from "@/lib/selectOptionsAPI";
 
 import { City, employeeSchema, Employee } from "@/models/apiModels";
@@ -213,13 +214,14 @@ export default function EmployeeAddForm() {
                 fetchItems={getLaboralRelations}
                 placeholder="Relación laboral"
               />
-              {/* Ciudades */}
+              {/* Categorias */}
               <SelectFormField
                 control={form.control as unknown as Control<FieldValues>}
-                name="laboralRegimeId"
-                formLabel="Régimen laboral"
-                fetchItems={getLaboralRegimes}
-                placeholder="Régimen laboral"
+                name="categoryId"
+                formLabel="Categoría"
+                fetchItems={getCategories}
+                placeholder="Categoría"
+                optionStartLabel="Categoría"
               />
             </div>
             {/* <div className="w-full flex flex-row items-center justify-end mt-8">

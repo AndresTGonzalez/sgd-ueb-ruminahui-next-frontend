@@ -27,6 +27,7 @@ export default function SelectFormField({
   fetchItems,
   handleChange,
   options,
+  optionStartLabel = "",
 }: {
   control: Control<FieldValues>;
   name: string;
@@ -35,6 +36,7 @@ export default function SelectFormField({
   fetchItems?: () => Promise<SelectorOption[]>;
   handleChange?: (value: string) => void;
   options?: SelectorOption[];
+  optionStartLabel?: string;
 }) {
   const [items, setItems] = useState<SelectorOption[]>([]);
 
@@ -68,7 +70,7 @@ export default function SelectFormField({
             <SelectContent>
               {items.map((items) => (
                 <SelectItem key={items.id} value={items.id.toString()}>
-                  {items.name}
+                  {optionStartLabel + " " + items.name}
                 </SelectItem>
               ))}
             </SelectContent>
