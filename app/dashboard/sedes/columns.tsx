@@ -14,14 +14,7 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Campus = {
-  id: string;
-  name: string;
-  address: string;
-};
+import { Campus } from "@/models/campus";
 
 export const columns: ColumnDef<Campus>[] = [
   {
@@ -57,11 +50,13 @@ export const columns: ColumnDef<Campus>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             {/* <DropdownMenuLabel>Opciones</DropdownMenuLabel> */}
-            <DropdownMenuItem onClick={
-              () => {
+            <DropdownMenuItem
+              onClick={() => {
                 console.log("Edit", row.original.id);
-              }
-            }>Modificar</DropdownMenuItem>
+              }}
+            >
+              Modificar
+            </DropdownMenuItem>
             <DropdownMenuItem>Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Separator } from "@/components/ui/separator";
 import { UserIcon } from "@heroicons/react/24/solid";
 import EmployeeAddForm from "@/components/Personal/EmployeeAddForm";
-import { Employee } from "@/models/apiModels";
+import { Employee } from "@/models/employee";
 import { getEmployee } from "@/lib/employeeAPIActions";
 import { ScrollArea } from "@/components/ui/scroll-area";
 

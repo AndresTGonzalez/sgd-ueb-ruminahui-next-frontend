@@ -1,7 +1,7 @@
 "use server";
 
 import { getSessionData } from "@/auth/getSession";
-import { SelectorOption } from "@/models/apiModels";
+import { SelectorOption } from "@/models/selectorOption";
 import { host } from "./constants";
 
 export async function getProvinces() {

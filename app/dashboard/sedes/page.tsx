@@ -1,18 +1,23 @@
-import { Campus, columns } from "./columns";
+"use client";
+
+import { useState, useEffect } from "react";
+
+import { columns } from "./columns";
 import { DataTable } from "./DataTable";
+import { Campus } from "@/models/campus";
+import { getCampus } from "@/lib/campusAPIActions";
 
 async function getData(): Promise<Campus[]> {
-  // Fetch data from your API here.
-  return [
-    { id: "1", name: "Sede 1asdfasdfsadfasdfdasfadsfsdafsvdsafadsfasdfadsfsadfadsfsadfsdafasd", address: "Calle 1" },
-    { id: "2", name: "Sede 2", address: "Calle 2asdfasdfadsfadsfasdfadsfadsf" },
-    { id: "3", name: "Sede 3", address: "Calle 3" },
-    // ...
-  ];
+  return await getCampus();
 }
 
-export default async function Page() {
-  const data = await getData();
+export default function Page() {
+  const [data, setData] = useState<Campus[]>([]);
+  useEffect(() => {
+    getData().then((data) => {
+      setData(data);
+    });
+  }, []);
 
   return (
     <div className="container mx-auto py-10">

@@ -1,4 +1,4 @@
-import { NavigationItem } from "@/models/uiModels";
+import { NavigationItem } from "@/models/navigationItem";
 
 import {
   CalendarDaysIcon,

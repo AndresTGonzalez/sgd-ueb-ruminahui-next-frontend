@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
   });
 
   const handleNew = () => {
-    router.push("/dashboard/sedes/id");
+    router.push("/dashboard/sedes/0");
   };
 
   return (

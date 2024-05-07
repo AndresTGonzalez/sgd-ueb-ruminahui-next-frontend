@@ -1,5 +1,5 @@
 import { getSessionData } from "@/auth/getSession";
-import { Employee } from "@/models/apiModels";
+import { Employee } from "@/models/employee";
 import { personalEndpoint } from "./constants";
 
 export async function getEmployees() {

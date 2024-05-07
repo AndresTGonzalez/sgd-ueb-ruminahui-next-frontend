@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../ui/button";
-import { NavigationItem } from "@/models/uiModels";
+import { NavigationItem } from "@/models/navigationItem";
 
 import { useRouter, usePathname } from "next/navigation";
 
