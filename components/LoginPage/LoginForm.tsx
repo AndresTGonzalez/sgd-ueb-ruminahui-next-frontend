@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
 import { encrypt } from "@/utils/crypto";
-import { User, userSchema } from "@/models/apiModels";
+import { User, userSchema } from "@/models/user";
 
 import { signIn } from "@/auth/signIn";
 import { getSessionData } from "@/auth/getSession";

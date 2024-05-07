@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 import { columns } from "./columns";
 import { DataTable } from "./DataTable";
-import { Employee } from "@/models/apiModels";
+import { Employee } from "@/models/employee";
 import { getEmployees } from "@/lib/employeeAPIActions";
 
 async function getData(): Promise<Employee[]> {

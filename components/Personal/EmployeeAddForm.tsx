@@ -19,7 +19,7 @@ import {
   getCategories,
 } from "@/lib/selectOptionsAPI";
 
-import { City, employeeSchema, Employee } from "@/models/apiModels";
+// import { City, employeeSchema, Employee } from "@/models/apiModels";
 
 import { Control, FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,6 +30,8 @@ import SelectFormField from "../Misc/SelectFormField";
 import TextAreaFormField from "../Misc/TextAreaFormField";
 
 import { createEmployee } from "@/lib/employeeAPIActions";
+import { City } from "@/models/selectorOption";
+import { Employee, employeeSchema } from "@/models/employee";
 
 export default function EmployeeAddForm() {
   const router = useRouter();

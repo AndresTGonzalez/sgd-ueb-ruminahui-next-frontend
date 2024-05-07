@@ -21,7 +21,7 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-import { Employee } from "@/models/apiModels";
+import { Employee } from "@/models/employee";
 
 export const columns: ColumnDef<Employee>[] = [
   {
