@@ -43,3 +43,30 @@ export async function createCampus(campus: CreateCampus) {
   const statusCode = response.status;
   return statusCode;
 }
+
+export async function updateCampus(campus: Campus) {
+  const session = await getSessionData();
+  const response = await fetch(`${campusEndpoint}/${campus.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session}`,
+    },
+    body: JSON.stringify(campus),
+  });
+  const data = await response.json();
+  console.log(data);
+  return data;
+}
+
+export async function deleteCampus(id: number) {
+  const session = await getSessionData();
+  const response = await fetch(`${campusEndpoint}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  console.log(response.status);
+  return response.status;
+}

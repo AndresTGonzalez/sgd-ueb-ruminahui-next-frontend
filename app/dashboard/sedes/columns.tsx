@@ -16,6 +16,7 @@ import {
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
 import { Campus } from "@/models/campus";
+import { deleteCampus } from "@/lib/campusAPIActions";
 
 export const columns: ColumnDef<Campus>[] = [
   {
@@ -41,11 +42,16 @@ export const columns: ColumnDef<Campus>[] = [
   {
     accessorKey: "actions",
     header: "",
+
     cell: ({ row }) => {
       const router = useRouter();
-
       const handleEdit = () => {
         router.push(`/dashboard/sedes/${row.original.id}`);
+      };
+
+      const handleDelete = () => {
+        console.log("delete");
+        deleteCampus(row.original.id);
       };
 
       return (
@@ -56,16 +62,8 @@ export const columns: ColumnDef<Campus>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {/* <DropdownMenuLabel>Opciones</DropdownMenuLabel> */}
-            <DropdownMenuItem
-              // onClick={() => {
-              //   handleEdit();
-              // }}
-              onClick={handleEdit}
-            >
-              Modificar
-            </DropdownMenuItem>
-            <DropdownMenuItem>Eliminar</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleDelete}>Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

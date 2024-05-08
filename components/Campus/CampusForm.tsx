@@ -12,7 +12,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import InputFormField from "../Misc/InputFormField";
-import { Campus, CreateCampus, campusSchema } from "@/models/campus";
+import { CreateCampus, campusSchema } from "@/models/campus";
 import { createCampus, getCampusById } from "@/lib/campusAPIActions";
 import { toast } from "sonner";
 
