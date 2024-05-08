@@ -16,6 +16,18 @@ export async function getCampus() {
   return data;
 }
 
+export async function getCampusById(id: number) {
+  const session = await getSessionData();
+  const response = await fetch(`${campusEndpoint}/${id}`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  console.log(data);
+  return data;
+}
+
 export async function createCampus(campus: CreateCampus) {
   const session = await getSessionData();
   const response = await fetch(campusEndpoint, {
@@ -28,6 +40,6 @@ export async function createCampus(campus: CreateCampus) {
   });
   const data = await response.json();
   console.log(response.status);
-  const statusCode =  response.status;
+  const statusCode = response.status;
   return statusCode;
 }

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -11,13 +13,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import InputFormField from "../Misc/InputFormField";
 import { Campus, CreateCampus, campusSchema } from "@/models/campus";
-import { createCampus } from "@/lib/campusAPIActions";
+import { createCampus, getCampusById } from "@/lib/campusAPIActions";
 import { toast } from "sonner";
 
-export default function CampusForm() {
+export default function CampusForm({ campusId }: { campusId: number }) {
   const router = useRouter();
 
   const handleCancel = () => {
+    console.log("cancel");
     router.replace("/dashboard/sedes");
   };
 
@@ -39,7 +42,22 @@ export default function CampusForm() {
 
   const form = useForm<z.infer<typeof campusSchema>>({
     resolver: zodResolver(campusSchema),
+    defaultValues: {
+      name: "",
+      secondaryName: "",
+      address: "",
+    },
   });
+
+  useEffect(() => {
+    const fetchCampus = async () => {
+      if (campusId === 0) return;
+      const campus = await getCampusById(campusId);
+      form.reset(campus);
+    };
+
+    fetchCampus();
+  }, []);
 
   return (
     <div className="w-full h-full flex flex-col px-8">
@@ -72,6 +90,7 @@ export default function CampusForm() {
             </div>
             <div className="w-full flex flex-row space-x-4 justify-end mt-10">
               <Button
+                type="button"
                 className="w-36"
                 variant="destructive"
                 onClick={handleCancel}

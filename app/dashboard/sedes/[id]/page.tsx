@@ -30,7 +30,7 @@ export default function Page({ params }: { params: { id: string } }) {
         <Separator />
         {/* Inicia la parte del formulario */}
         <ScrollArea>
-          <CampusForm />
+          <CampusForm campusId={parseInt(params.id)} />
         </ScrollArea>
       </div>
     </div>

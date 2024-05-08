@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,12 @@ export const columns: ColumnDef<Campus>[] = [
     accessorKey: "actions",
     header: "",
     cell: ({ row }) => {
+      const router = useRouter();
+
+      const handleEdit = () => {
+        router.push(`/dashboard/sedes/${row.original.id}`);
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -51,9 +58,10 @@ export const columns: ColumnDef<Campus>[] = [
           <DropdownMenuContent>
             {/* <DropdownMenuLabel>Opciones</DropdownMenuLabel> */}
             <DropdownMenuItem
-              onClick={() => {
-                console.log("Edit", row.original.id);
-              }}
+              // onClick={() => {
+              //   handleEdit();
+              // }}
+              onClick={handleEdit}
             >
               Modificar
             </DropdownMenuItem>
