@@ -9,12 +9,6 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import CampusForm from "@/components/Campus/CampusForm";
 
 export default function Page({ params }: { params: { id: string } }) {
-  const router = useRouter();
-
-  const handleCancel = () => {
-    router.replace("/dashboard/sedes");
-  };
-
   return (
     <div className="w-full h-full flex flex-col justify-between mx-auto py-10">
       <div className="flex flex-col space-y-3">

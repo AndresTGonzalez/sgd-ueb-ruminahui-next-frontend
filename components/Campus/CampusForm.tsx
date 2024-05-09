@@ -12,8 +12,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import InputFormField from "../Misc/InputFormField";
-import { CreateCampus, campusSchema } from "@/models/campus";
-import { createCampus, getCampusById } from "@/lib/campusAPIActions";
+import { CreateCampus, UpdateCampus, campusSchema } from "@/models/campus";
+import {
+  createCampus,
+  getCampusById,
+  updateCampus,
+} from "@/lib/campusAPIActions";
 import { toast } from "sonner";
 
 export default function CampusForm({ campusId }: { campusId: number }) {
@@ -25,18 +29,40 @@ export default function CampusForm({ campusId }: { campusId: number }) {
   };
 
   const onSubmit = async (formData: z.infer<typeof campusSchema>) => {
-    const newCampus: CreateCampus = {
-      name: formData.name,
-      secondaryName: formData.secondaryName,
-      address: formData.address,
-    };
+    // Se crea un nuevo campus con los datos del formulario
 
-    const response = await createCampus(newCampus);
-
-    if (response === 201) {
-      toast.success("Campus registrado exitosamente");
-      router.push("/dashboard/sedes");
+    if (campusId !== 0) {
+      const updateCampusData: UpdateCampus = {
+        id: campusId,
+        name: formData.name,
+        secondaryName: formData.secondaryName,
+        address: formData.address,
+      };
+      //Se actualiza el campus
+      const response = await updateCampus(updateCampusData);
+      console.log("response", response);
+      if (response === 200) {
+        toast.success("Campus actualizado exitosamente");
+        router.push("/dashboard/sedes");
+      } else {
+        toast.error("Error al actualizar el campus");
+      }
+      return;
     } else {
+      const createCampusData: CreateCampus = {
+        name: formData.name,
+        secondaryName: formData.secondaryName,
+        address: formData.address,
+      };
+
+      const response = await createCampus(createCampusData);
+
+      if (response === 201) {
+        toast.success("Campus registrado exitosamente");
+        router.push("/dashboard/sedes");
+      } else {
+        toast.error("Error al registrar el campus");
+      }
     }
   };
 

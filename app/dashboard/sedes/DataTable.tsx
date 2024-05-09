@@ -69,7 +69,8 @@ export function DataTable<TData, TValue>({
         console.log("id >> ", id);
       },
       editData: (id: number) => {
-        console.log("id >> ", id);
+        // console.log("id >> ", id);
+        handleEdit && handleEdit(id);
       },
       selectRow: (id: number) => {
         // console.log("id >> ", id);

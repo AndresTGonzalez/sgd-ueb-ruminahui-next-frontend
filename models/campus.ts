@@ -14,6 +14,7 @@ export interface CreateCampus {
 }
 
 export interface UpdateCampus {
+  id: number;
   name: string;
   secondaryName: string;
   address: string;

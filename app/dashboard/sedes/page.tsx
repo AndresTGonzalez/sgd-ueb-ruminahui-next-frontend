@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 
+import { useRouter } from "next/navigation";
+
 import { columns } from "./columns";
 import { DataTable } from "./DataTable";
 import { Campus } from "@/models/campus";
@@ -14,6 +16,8 @@ async function getData(): Promise<Campus[]> {
 }
 
 export default function Page() {
+  const router = useRouter();
+
   const [data, setData] = useState<Campus[]>([]);
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
@@ -39,9 +43,19 @@ export default function Page() {
     }
   };
 
+  const handleEdit = (id: number) => {
+    // console.log("Edit", id);
+    router.push("/dashboard/sedes/" + id);
+  };
+
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} selectRow={selectRow} />
+      <DataTable
+        columns={columns}
+        data={data}
+        selectRow={selectRow}
+        handleEdit={handleEdit}
+      />
       <DeleteAlertDialog
         open={open}
         id={id}

@@ -55,8 +55,7 @@ export async function updateCampus(campus: Campus) {
     body: JSON.stringify(campus),
   });
   const data = await response.json();
-  console.log(data);
-  return data;
+  return response.status;
 }
 
 export async function deleteCampus(id: number) {
