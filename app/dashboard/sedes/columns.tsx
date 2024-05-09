@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,50 @@ import {
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
 import { Campus } from "@/models/campus";
-import { deleteCampus } from "@/lib/campusAPIActions";
+
+declare module "@tanstack/react-table" {
+  interface TableMeta<TData extends RowData> {
+    deleteData: (id: number) => void;
+    viewData: (id: number) => void;
+    editData: (id: number) => void;
+    selectRow: (id: number) => void;
+  }
+}
+
+const ActionColumn: Partial<ColumnDef<Campus>> = {
+  cell: ({ getValue, row: { index }, column: { id }, table }) => {
+    const initialValue = getValue() as number;
+
+    const handleView = () => {
+      table.options.meta?.viewData(initialValue);
+    };
+    const handleDelete = () => {
+      table.options.meta?.deleteData(initialValue);
+    };
+    const handleEdit = () => {
+      table.options.meta?.editData(initialValue);
+    };
+    const selectRow = () => {
+      table.options.meta?.selectRow(initialValue);
+    };
+
+    return (
+      <>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"secondary"} size={"icon"}>
+              <EllipsisVerticalIcon width={20} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem>
+            <DropdownMenuItem onClick={selectRow}>Eliminar</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </>
+    );
+  },
+};
 
 export const columns: ColumnDef<Campus>[] = [
   {
@@ -39,34 +82,38 @@ export const columns: ColumnDef<Campus>[] = [
     header: "Dirección",
     size: 500,
   },
+  // {
+  //   accessorKey: "actions",
+  //   header: "",
+
+  //   cell: ({ row }) => {
+  //     const router = useRouter();
+
+  //     const handleEdit = () => {
+  //       router.push(`/dashboard/sedes/${row.original.id}`);
+  //     };
+  //     return (
+  //       <>
+  //         <DropdownMenu>
+  //           <DropdownMenuTrigger asChild>
+  //             <Button variant={"secondary"} size={"icon"}>
+  //               <EllipsisVerticalIcon width={20} />
+  //             </Button>
+  //           </DropdownMenuTrigger>
+  //           <DropdownMenuContent>
+  //             <DropdownMenuItem onClick={handleEdit}>
+  //               Modificar
+  //             </DropdownMenuItem>
+  //             <DropdownMenuItem>Eliminar</DropdownMenuItem>
+  //           </DropdownMenuContent>
+  //         </DropdownMenu>
+  //       </>
+  //     );
+  //   },
+  // },
   {
-    accessorKey: "actions",
+    accessorKey: "id",
     header: "",
-
-    cell: ({ row }) => {
-      const router = useRouter();
-      const handleEdit = () => {
-        router.push(`/dashboard/sedes/${row.original.id}`);
-      };
-
-      const handleDelete = () => {
-        console.log("delete");
-        deleteCampus(row.original.id);
-      };
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant={"secondary"} size={"icon"}>
-              <EllipsisVerticalIcon width={20} />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleDelete}>Eliminar</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    ...ActionColumn,
   },
 ];

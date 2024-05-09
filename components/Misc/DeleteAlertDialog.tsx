@@ -11,12 +11,16 @@ import {
 
 export function DeleteAlertDialog({
   open,
-  handleEliminate,
+  handleDelete,
+  handleCancel,
+  id,
   title,
   message,
 }: {
   open: boolean;
-  handleEliminate: () => Promise<void>;
+  handleDelete: (id: number) => Promise<void>;
+  handleCancel: () => void;
+  id: number;
   title: string;
   message: string;
 }) {
@@ -28,10 +32,10 @@ export function DeleteAlertDialog({
           <AlertDialogDescription>{message}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel onClick={handleCancel}>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={async () => {
-              await handleEliminate();
+              await handleDelete(id);
             }}
           >
             Eliminar

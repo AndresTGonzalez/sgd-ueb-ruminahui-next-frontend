@@ -102,15 +102,6 @@ export const columns: ColumnDef<Employee>[] = [
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <DeleteAlertDialog
-            open={open}
-            handleEliminate={async () => {
-              await deleteEmployee(row.original.id!);
-              setOpen(false);
-            }}
-            title="Eliminar empleado"
-            message="¿Está seguro que desea eliminar este empleado?"
-          />
         </>
       );
     },
