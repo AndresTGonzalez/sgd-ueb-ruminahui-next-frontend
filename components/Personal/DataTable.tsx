@@ -80,7 +80,7 @@ export function DataTable<TData, TValue>({
   });
 
   const handleNew = () => {
-    router.push("/dashboard/personal/0");
+    router.push("/dashboard/personal/formulario/0");
   };
 
   return (

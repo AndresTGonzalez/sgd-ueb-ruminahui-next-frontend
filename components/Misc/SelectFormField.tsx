@@ -49,7 +49,7 @@ export default function SelectFormField({
     } else if (fetchItems) {
       fetchItems().then((data) => {
         setItems(data);
-        setInitialValue(data[0].id);
+        // setInitialValue(data[0].id);
       });
     }
   }, [options, fetchItems]);

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import { Employee } from "@/models/employee";
+import { Employee } from "@/models/personal";
 import { deleteEmployee, getEmployees } from "@/lib/employeeAPIActions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

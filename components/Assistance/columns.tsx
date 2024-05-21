@@ -1,11 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { deleteEmployee } from "@/lib/employeeAPIActions";
-
-import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
+import { Badge } from "@/components/ui/badge";
 
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
@@ -21,7 +16,8 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-import { Employee } from "@/models/employee";
+import { Employee } from "@/models/personal";
+import { Assistance } from "@/models/assistance";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
@@ -32,7 +28,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-const ActionColumn: Partial<ColumnDef<Employee>> = {
+const ActionColumn: Partial<ColumnDef<Assistance>> = {
   cell: ({ getValue, row: { index }, column: { id }, table }) => {
     const initialValue = getValue() as number;
 
@@ -68,12 +64,10 @@ const ActionColumn: Partial<ColumnDef<Employee>> = {
   },
 };
 
-export const columns: ColumnDef<Employee>[] = [
+export const columns: ColumnDef<Assistance>[] = [
   {
     accessorKey: "identificationCard",
     header: "Cédula",
-    enableResizing: false, //disable resizing for just this column
-    size: 200, //starting column size
   },
   {
     accessorKey: "names",
@@ -116,8 +110,24 @@ export const columns: ColumnDef<Employee>[] = [
     },
   },
   {
-    accessorKey: "id",
-    header: "",
-    ...ActionColumn,
+    accessorKey: "clockCheck",
+    header: "Registro de reloj",
   },
+  {
+    accessorKey: "onTime",
+    header: "A tiempo",
+    cell: ({ getValue }) => {
+      // return getValue() ? "Sí" : "No";
+      return (
+        <Badge variant={getValue() ? "success" : "destructive"}>
+          {getValue() ? "A tiempo" : "Atraso o inconsistencia"}
+        </Badge>
+      );
+    },
+  },
+  // {
+  //   accessorKey: "id",
+  //   header: "",
+  //   ...ActionColumn,
+  // },
 ];

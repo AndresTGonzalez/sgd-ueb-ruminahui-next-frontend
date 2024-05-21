@@ -21,7 +21,7 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-import { Employee } from "@/models/employee";
+import { Employee } from "@/models/personal";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
