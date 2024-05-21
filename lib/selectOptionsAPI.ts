@@ -6,7 +6,7 @@ import { host } from "./constants";
 
 export async function getProvinces() {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/provinces`, {
+  const response = await fetch(`${host}/api/province`, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
@@ -17,7 +17,7 @@ export async function getProvinces() {
 
 export async function getCitiesByProvince(provinceId: number) {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/cities/province/${provinceId}`, {
+  const response = await fetch(`${host}/api/city/province/${provinceId}`, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
@@ -28,7 +28,7 @@ export async function getCitiesByProvince(provinceId: number) {
 
 export async function getGenders(): Promise<SelectorOption[]> {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/sexs`, {
+  const response = await fetch(`${host}/api/gender`, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
@@ -39,7 +39,7 @@ export async function getGenders(): Promise<SelectorOption[]> {
 
 export async function getCivilStatus() {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/marital-statuses`, {
+  const response = await fetch(`${host}/api/marital-status`, {
     headers: {
       Authorization: `Bearer ${session}`,
     },
@@ -83,7 +83,18 @@ export async function getLaboralRelations(): Promise<SelectorOption[]> {
 
 export async function getCategories(): Promise<SelectorOption[]> {
   const session = await getSessionData();
-  const response = await fetch(`${host}/api/categories`, {
+  const response = await fetch(`${host}/api/category`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}
+
+export async function getJournals(): Promise<SelectorOption[]> {
+  const session = await getSessionData();
+  const response = await fetch(`${host}/api/journal`, {
     headers: {
       Authorization: `Bearer ${session}`,
     },

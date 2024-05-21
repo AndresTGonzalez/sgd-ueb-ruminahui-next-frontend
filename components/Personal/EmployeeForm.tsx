@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -17,9 +19,8 @@ import {
   getLaboralRegimes,
   getLaboralRelations,
   getCategories,
+  getJournals,
 } from "@/lib/selectOptionsAPI";
-
-// import { City, employeeSchema, Employee } from "@/models/apiModels";
 
 import { Control, FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,14 +30,24 @@ import InputFormField from "../Misc/InputFormField";
 import SelectFormField from "../Misc/SelectFormField";
 import TextAreaFormField from "../Misc/TextAreaFormField";
 
-import { createEmployee } from "@/lib/employeeAPIActions";
+import { createEmployee, getEmployee } from "@/lib/employeeAPIActions";
 import { City } from "@/models/selectorOption";
 import { Employee, employeeSchema } from "@/models/employee";
 
-export default function EmployeeAddForm() {
+export default function EmployeeForm({ employeeId }: { employeeId: number }) {
   const router = useRouter();
 
   const [cities, setCities] = useState<City[]>([]);
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      if (employeeId == 0) return;
+      const employee = await getEmployee(employeeId);
+      form.reset(employee);
+    };
+
+    fetchEmployee();
+  }, [employeeId]);
 
   const handleProvinceChange = async (value: string) => {
     const provinceId = parseInt(value);
@@ -51,9 +62,6 @@ export default function EmployeeAddForm() {
 
   const form = useForm<z.infer<typeof employeeSchema>>({
     resolver: zodResolver(employeeSchema),
-    defaultValues: {
-      // identificationCard: employee!.identificationCard,
-    },
   });
 
   const onSubmit = async (formData: z.infer<typeof employeeSchema>) => {
@@ -69,12 +77,19 @@ export default function EmployeeAddForm() {
       genderId: formData.genderId,
       maritalStatusId: formData.maritalStatusId,
       cityId: formData.cityId,
+      functionId: formData.functionId,
+      laboralRegimeId: formData.laboralRegimeId,
+      laboralRelationshipId: formData.laboralRelationshipId,
+      journalId: formData.journalId,
+      categoryId: formData.categoryId,
     };
 
     const response = await createEmployee(newEmployee);
-    if (response) {
+    if (response === 201) {
       toast.success("Empleado registrado exitosamente");
       router.push("/dashboard/personal");
+    } else {
+      toast.error("Error al registrar el empleado");
     }
   };
 
@@ -188,9 +203,11 @@ export default function EmployeeAddForm() {
                 placeholder="Dirección"
               />
             </div>
+
+            <h3 className="text-lg font-light">Hoja de vida:</h3>
             <h3 className="text-lg font-light">Datos institucionales:</h3>
             <div className="w-full grid grid-cols-2 gap-20">
-              {/* Funcion */}
+              {/* Función */}
               <SelectFormField
                 control={form.control as unknown as Control<FieldValues>}
                 name="functionId"
@@ -198,7 +215,7 @@ export default function EmployeeAddForm() {
                 fetchItems={getFunctions}
                 placeholder="Función"
               />
-              {/* Ciudades */}
+              {/* Regimén Laboral */}
               <SelectFormField
                 control={form.control as unknown as Control<FieldValues>}
                 name="laboralRegimeId"
@@ -211,7 +228,7 @@ export default function EmployeeAddForm() {
               {/* Relacion laboral */}
               <SelectFormField
                 control={form.control as unknown as Control<FieldValues>}
-                name="functionId"
+                name="laboralRelationshipId"
                 formLabel="Relación laboral"
                 fetchItems={getLaboralRelations}
                 placeholder="Relación laboral"
@@ -226,9 +243,129 @@ export default function EmployeeAddForm() {
                 optionStartLabel="Categoría"
               />
             </div>
-            {/* <div className="w-full flex flex-row items-center justify-end mt-8">
-              
-            </div> */}
+            <div className="w-full grid grid-cols-2 gap-20">
+              {/* Jornada */}
+              <SelectFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="journalId"
+                formLabel="Jornada"
+                fetchItems={getJournals}
+                placeholder="Jornada"
+              />
+            </div>
+            <h3 className="text-lg font-light">Datos de asistencia:</h3>
+            <div className="grid grid-cols-2">
+              <div>
+                <h4>Códigos de asistencia:</h4>
+                <div className="w-full grid grid-cols-1 gap-5 pr-10">
+                  {/* Codigo de asistencia */}
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="attendanceCode"
+                    formLabel="Sede principal"
+                    placeholder="123456"
+                  />
+                  {/* Codigo de asistencia */}
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="attendanceCode"
+                    formLabel="Sede secundaria"
+                    placeholder="123456"
+                  />
+                  {/* Codigo de asistencia */}
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="attendanceCode"
+                    formLabel="Sede terciaria"
+                    placeholder="123456"
+                  />
+                </div>
+              </div>
+              <div className="w-full h-fit">
+                <h4>Horarios asignados:</h4>
+                {/* Lunes */}
+                <span>Lunes:</span>
+                <div className="w-full grid grid-cols-2 gap-5">
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="mondayStart"
+                    formLabel="Inicio"
+                    type="time"
+                  />
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="mondayEnd"
+                    formLabel="Fin"
+                    type="time"
+                  />
+                </div>
+                {/* Martes */}
+                <span>Martes:</span>
+                <div className="w-full grid grid-cols-2 gap-5">
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="tuesdayStart"
+                    formLabel="Inicio"
+                    type="time"
+                  />
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="tuesdayEnd"
+                    formLabel="Fin"
+                    type="time"
+                  />
+                </div>
+                {/* Miercoles */}
+                <span>Miércoles:</span>
+                <div className="w-full grid grid-cols-2 gap-5">
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="wednesdayStart"
+                    formLabel="Inicio"
+                    type="time"
+                  />
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="wednesdayEnd"
+                    formLabel="Fin"
+                    type="time"
+                  />
+                </div>
+                {/* Jueves */}
+                <span>Jueves:</span>
+                <div className="w-full grid grid-cols-2 gap-5">
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="thursdayStart"
+                    formLabel="Inicio"
+                    type="time"
+                  />
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="thursdayEnd"
+                    formLabel="Fin"
+                    type="time"
+                  />
+                </div>
+                {/* Viernes */}
+                <span>Viernes:</span>
+                <div className="w-full grid grid-cols-2 gap-5">
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="fridayStart"
+                    formLabel="Inicio"
+                    type="time"
+                  />
+                  <InputFormField
+                    control={form.control as unknown as Control<FieldValues>}
+                    name="fridayEnd"
+                    formLabel="Fin"
+                    type="time"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="w-full flex flex-row space-x-4 justify-end mt-10">
               <Button
                 className="w-36"

@@ -29,8 +29,6 @@ export default function CampusForm({ campusId }: { campusId: number }) {
   };
 
   const onSubmit = async (formData: z.infer<typeof campusSchema>) => {
-    // Se crea un nuevo campus con los datos del formulario
-
     if (campusId !== 0) {
       const updateCampusData: UpdateCampus = {
         id: campusId,

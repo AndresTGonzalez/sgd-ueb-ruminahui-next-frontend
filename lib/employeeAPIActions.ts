@@ -35,7 +35,8 @@ export async function createEmployee(employee: Employee) {
     body: JSON.stringify(employee),
   });
   const data = await response.json();
-  return data;
+  const statusCode = response.status;
+  return statusCode;
 }
 
 export async function updateEmployee(employee: Employee) {

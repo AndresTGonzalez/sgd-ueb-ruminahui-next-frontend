@@ -17,7 +17,7 @@ import {
   SelectContent,
   SelectItem,
 } from "../ui/select";
-import { SelectorOption } from "@/models/apiModels";
+import { SelectorOption } from "@/models/selectorOption";
 
 export default function SelectFormField({
   control,
@@ -28,6 +28,7 @@ export default function SelectFormField({
   handleChange,
   options,
   optionStartLabel = "",
+  defaultValue = 0,
 }: {
   control: Control<FieldValues>;
   name: string;
@@ -37,14 +38,19 @@ export default function SelectFormField({
   handleChange?: (value: string) => void;
   options?: SelectorOption[];
   optionStartLabel?: string;
+  defaultValue?: number;
 }) {
   const [items, setItems] = useState<SelectorOption[]>([]);
-
+  const [initialValue, setInitialValue] = useState<number>(0);
   useEffect(() => {
     if (options) {
       setItems(options);
+      // setInitialValue(options[0].id);
     } else if (fetchItems) {
-      fetchItems().then((data) => setItems(data));
+      fetchItems().then((data) => {
+        setItems(data);
+        setInitialValue(data[0].id);
+      });
     }
   }, [options, fetchItems]);
 
@@ -56,6 +62,8 @@ export default function SelectFormField({
         <FormItem>
           <FormLabel>{formLabel}</FormLabel>
           <Select
+            // defaultValue={value.toString()}
+            // value={initialValue.toString()}
             onValueChange={
               handleChange
                 ? (value) => handleChange(value)

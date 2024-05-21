@@ -31,11 +31,19 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  handleDelete?: (id: number) => void;
+  handleEdit?: (id: number) => void;
+  selectRow?: (id: number) => void;
+  handleView?: (id: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  handleDelete,
+  handleEdit,
+  selectRow,
+  handleView,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -54,6 +62,20 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
+    },
+    meta: {
+      deleteData: (id: number) => {
+        handleDelete && handleDelete(id);
+      },
+      viewData: (id: number) => {
+        handleView && handleView(id);
+      },
+      editData: (id: number) => {
+        handleEdit && handleEdit(id);
+      },
+      selectRow: (id: number) => {
+        selectRow && selectRow(id);
+      },
     },
   });
 

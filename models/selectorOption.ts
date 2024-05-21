@@ -14,10 +14,12 @@ export interface Gender extends SelectorOption {}
 
 export interface MaritalStatus extends SelectorOption {}
 
-export interface FunctionType extends SelectorOption {}
+export interface FunctionEmployee extends SelectorOption {}
 
 export interface LaboralRegime extends SelectorOption {}
 
-export interface LaboralRelation extends SelectorOption {}
+export interface LaboralRelationship extends SelectorOption {}
 
 export interface Category extends SelectorOption {}
+
+export interface Journal extends SelectorOption {}

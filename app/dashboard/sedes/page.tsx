@@ -4,12 +4,12 @@ import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { columns } from "./columns";
-import { DataTable } from "./DataTable";
 import { Campus } from "@/models/campus";
 import { deleteCampus, getCampus } from "@/lib/campusAPIActions";
 import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
 import { toast } from "sonner";
+import { DataTable } from "@/components/Campus/DataTable";
+import { columns } from "@/components/Campus/columns";
 
 async function getData(): Promise<Campus[]> {
   return await getCampus();
@@ -44,7 +44,6 @@ export default function Page() {
   };
 
   const handleEdit = (id: number) => {
-    // console.log("Edit", id);
     router.push("/dashboard/sedes/" + id);
   };
 

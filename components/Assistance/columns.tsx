@@ -1,6 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+
+import { deleteEmployee } from "@/lib/employeeAPIActions";
+
+import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
+
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +21,7 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-import { Campus } from "@/models/campus";
+import { Employee } from "@/models/employee";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
@@ -26,7 +32,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-const ActionColumn: Partial<ColumnDef<Campus>> = {
+const ActionColumn: Partial<ColumnDef<Employee>> = {
   cell: ({ getValue, row: { index }, column: { id }, table }) => {
     const initialValue = getValue() as number;
 
@@ -52,6 +58,7 @@ const ActionColumn: Partial<ColumnDef<Campus>> = {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+            <DropdownMenuItem onClick={handleView}>Visualizar</DropdownMenuItem>
             <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem>
             <DropdownMenuItem onClick={selectRow}>Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
@@ -61,56 +68,53 @@ const ActionColumn: Partial<ColumnDef<Campus>> = {
   },
 };
 
-export const columns: ColumnDef<Campus>[] = [
+export const columns: ColumnDef<Employee>[] = [
   {
-    accessorKey: "name",
-    size: 20,
+    accessorKey: "identificationCard",
+    header: "Cédula",
+    enableResizing: false, //disable resizing for just this column
+    size: 200, //starting column size
+  },
+  {
+    accessorKey: "names",
+    enableResizing: true,
+    size: 40,
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Nombre
-          <ArrowsUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex flex-row items-center">
+          <h2>Nombres</h2>
+          <Button
+            variant="ghost"
+            size={"icon"}
+            className="ml-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowsUpDownIcon className="h-4 w-4" />
+          </Button>
+        </div>
       );
     },
   },
   {
-    accessorKey: "address",
-    header: "Dirección",
-    size: 500,
+    accessorKey: "lastNames",
+    enableResizing: true,
+    size: 40,
+    header: ({ column }) => {
+      return (
+        <div className="flex flex-row items-center">
+          <h2>Apellidos</h2>
+          <Button
+            variant="ghost"
+            size={"icon"}
+            className="ml-2"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <ArrowsUpDownIcon className="h-4 w-4" />
+          </Button>
+        </div>
+      );
+    },
   },
-  // {
-  //   accessorKey: "actions",
-  //   header: "",
-
-  //   cell: ({ row }) => {
-  //     const router = useRouter();
-
-  //     const handleEdit = () => {
-  //       router.push(`/dashboard/sedes/${row.original.id}`);
-  //     };
-  //     return (
-  //       <>
-  //         <DropdownMenu>
-  //           <DropdownMenuTrigger asChild>
-  //             <Button variant={"secondary"} size={"icon"}>
-  //               <EllipsisVerticalIcon width={20} />
-  //             </Button>
-  //           </DropdownMenuTrigger>
-  //           <DropdownMenuContent>
-  //             <DropdownMenuItem onClick={handleEdit}>
-  //               Modificar
-  //             </DropdownMenuItem>
-  //             <DropdownMenuItem>Eliminar</DropdownMenuItem>
-  //           </DropdownMenuContent>
-  //         </DropdownMenu>
-  //       </>
-  //     );
-  //   },
-  // },
   {
     accessorKey: "id",
     header: "",

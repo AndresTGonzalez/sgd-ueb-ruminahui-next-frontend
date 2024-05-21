@@ -1,6 +1,15 @@
 import { z } from "zod";
 import { validateEcuadorianID } from "@/utils/identificationCardValidation";
-import { City, Gender, MaritalStatus } from "./selectorOption";
+import {
+  Category,
+  City,
+  FunctionEmployee,
+  Gender,
+  Journal,
+  LaboralRegime,
+  LaboralRelationship,
+  MaritalStatus,
+} from "./selectorOption";
 
 export interface Employee {
   id?: number;
@@ -18,6 +27,16 @@ export interface Employee {
   maritalStatus?: MaritalStatus;
   cityId: number;
   city?: City;
+  functionId: number;
+  function?: FunctionEmployee;
+  laboralRegimeId: number;
+  laboralRegime?: LaboralRegime;
+  laboralRelationshipId: number;
+  laboralRelationship?: LaboralRelationship;
+  journalId: number;
+  journal?: Journal;
+  categoryId: number;
+  category?: Category;
 }
 
 export const employeeSchema = z.object({
@@ -34,6 +53,14 @@ export const employeeSchema = z.object({
   genderId: z.number().int().min(1, "Seleccione un género"),
   maritalStatusId: z.number().int().min(1, "Seleccione un estado civil"),
   cityId: z.number().int().min(1, "Seleccione una ciudad"),
+  functionId: z.number().int().min(1, "Seleccione una función"),
+  laboralRegimeId: z.number().int().min(1, "Seleccione un régimen laboral"),
+  laboralRelationshipId: z
+    .number()
+    .int()
+    .min(1, "Seleccione una relación laboral"),
+  journalId: z.number().int().min(1, "Seleccione una jornada"),
+  categoryId: z.number().int().min(1, "Seleccione una categoría"),
 });
 
 // For UI only
