@@ -1,12 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-
-import { deleteEmployee } from "@/lib/employeeAPIActions";
-
-import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
-
 import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
@@ -71,49 +64,9 @@ const ActionColumn: Partial<ColumnDef<PersonalData>> = {
 export const columns: ColumnDef<PersonalData>[] = [
   {
     accessorKey: "identificationCard",
-    header: "Cédula",
+    header: "Día",
     enableResizing: false, //disable resizing for just this column
     size: 200, //starting column size
-  },
-  {
-    accessorKey: "names",
-    enableResizing: true,
-    size: 40,
-    header: ({ column }) => {
-      return (
-        <div className="flex flex-row items-center">
-          <h2>Nombres</h2>
-          <Button
-            variant="ghost"
-            size={"icon"}
-            className="ml-2"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            <ArrowsUpDownIcon className="h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "lastNames",
-    enableResizing: true,
-    size: 40,
-    header: ({ column }) => {
-      return (
-        <div className="flex flex-row items-center">
-          <h2>Apellidos</h2>
-          <Button
-            variant="ghost"
-            size={"icon"}
-            className="ml-2"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            <ArrowsUpDownIcon className="h-4 w-4" />
-          </Button>
-        </div>
-      );
-    },
   },
   {
     accessorKey: "id",

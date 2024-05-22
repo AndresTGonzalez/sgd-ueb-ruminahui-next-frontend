@@ -2,38 +2,42 @@
 
 import { useState, useEffect } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Control, FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import InputFormField from "../Misc/InputFormField";
 import SelectFormField from "../Misc/SelectFormField";
 import TextAreaFormField from "../Misc/TextAreaFormField";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
-import {
-  getProvinces,
-  getCitiesByProvince,
-  getGenders,
-  getCivilStatus,
-  getFunctions,
-  getLaboralRegimes,
-  getLaboralRelations,
-  getCategories,
-  getJournals,
-} from "@/lib/selectOptionsAPI";
-import { createEmployee, getEmployee } from "@/lib/employeeAPIActions";
+import { getBloodTypes } from "@/lib/selectOptionsAPI";
 
-import { City } from "@/models/selectorOption";
 import { toast } from "sonner";
-import { MedicalPersonalDataSchema } from "@/models/personal";
+import {
+  MedicalPersonalData,
+  MedicalPersonalDataSchema,
+} from "@/models/personal";
+import {
+  createMedicalPersonalData,
+  getMedicalPersonalData,
+} from "@/lib/medicalPersonalDataAPIActions";
 
-export default function MedicalDataForm() {
-  const router = useRouter();
+export default function MedicalDataForm({
+  personalId,
+}: {
+  personalId: number;
+}) {
+  const [medicalData, setMedicalData] = useState<MedicalPersonalData>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getMedicalPersonalData(personalId);
+      form.reset(data);
+    };
+    fetchData();
+  }, [personalId]);
 
   const form = useForm<z.infer<typeof MedicalPersonalDataSchema>>({
     resolver: zodResolver(MedicalPersonalDataSchema),
@@ -41,7 +45,22 @@ export default function MedicalDataForm() {
 
   const onSubmit = async (
     formData: z.infer<typeof MedicalPersonalDataSchema>
-  ) => {};
+  ) => {
+    const newData: MedicalPersonalData = {
+      personalId: Number(personalId),
+      bloodTypeId: formData.bloodTypeId,
+      personalMedication: formData.personalMedication,
+      personalDisease: formData.personalDisease,
+      personalAllergy: formData.personalAllergy,
+    };
+
+    const response = await createMedicalPersonalData(newData);
+    if (response === 201) {
+      toast.success("Datos médicos registrados exitosamente");
+    } else {
+      toast.error("Error al registrar los datos médicos");
+    }
+  };
 
   return (
     <div className="w-full h-full flex flex-col px-8">
@@ -49,15 +68,44 @@ export default function MedicalDataForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="py-7 w-full grid grid-cols-1 gap-5">
             <h3 className="text-lg font-light">Datos médicos:</h3>
-            <div className="w-full grid grid-cols-1 gap-20">
+            <div className="w-full grid grid-cols-1 gap-4">
               {/* Tipo de sangre */}
               <SelectFormField
                 control={form.control as unknown as Control<FieldValues>}
-                name="functionId"
+                name="bloodTypeId"
                 formLabel="Tipo de sangre"
-                fetchItems={getFunctions}
+                fetchItems={getBloodTypes}
                 placeholder="Tipo de sangre"
               />
+              {/* Alergias */}
+              <TextAreaFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="personalAllergy"
+                formLabel="Alergias"
+                placeholder="Alergias"
+                // defaultValue={medicalData?.personalAllergy}
+                defaultValue={"Test"}
+              />
+              {/* Enfermedades */}
+              <TextAreaFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="personalDisease"
+                formLabel="Enfermedades"
+                placeholder="Enfermedades"
+              />
+              {/* Medicamentos */}
+              <TextAreaFormField
+                control={form.control as unknown as Control<FieldValues>}
+                name="personalMedication"
+                formLabel="Medicamentos"
+                placeholder="Medicamentos"
+              />
+              {/* Boton de enviar */}
+              <div className="flex flex-row w-full justify-end">
+                <Button type="submit" className="w-fit" variant={"success"}>
+                  Guardar
+                </Button>
+              </div>
             </div>
           </div>
         </form>

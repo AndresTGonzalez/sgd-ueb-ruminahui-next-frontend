@@ -23,3 +23,5 @@ export interface LaboralRelationship extends SelectorOption {}
 export interface Category extends SelectorOption {}
 
 export interface Journal extends SelectorOption {}
+
+export interface BloodType extends SelectorOption {}

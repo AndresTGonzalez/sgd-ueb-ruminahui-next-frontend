@@ -102,3 +102,14 @@ export async function getJournals(): Promise<SelectorOption[]> {
   const data = await response.json();
   return data;
 }
+
+export async function getBloodTypes(): Promise<SelectorOption[]> {
+  const session = await getSessionData();
+  const response = await fetch(`${host}/api/blood-type`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}

@@ -14,27 +14,16 @@ import {
   getFilteredRowModel,
 } from "@tanstack/react-table";
 
-import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
-import { Menu } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
-
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 import { Input } from "@/components/ui/input";
 
@@ -57,11 +46,6 @@ interface DataTableProps<TData, TValue> {
   handleEdit?: (id: number) => void;
   selectRow?: (id: number) => void;
   handleView?: (id: number) => void;
-  fromDate: Date;
-  toDate: Date;
-  setFromDate: (date: Date) => void;
-  setToDate: (date: Date) => void;
-  handleReport?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -71,11 +55,6 @@ export function DataTable<TData, TValue>({
   handleEdit,
   selectRow,
   handleView,
-  fromDate,
-  setFromDate,
-  toDate,
-  setToDate,
-  handleReport,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -111,82 +90,58 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const handleNew = () => {
+    router.push("/dashboard/personal/formulario/0");
+  };
+
   return (
     <div>
       <div className="flex flex-row items-center justify-between py-4">
-        <Input
-          placeholder="Filtrar personal..."
-          value={(table.getColumn("names")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("names")?.setFilterValue(event.target.value)
-          }
-          className="w-72"
-        />
-        <div className="flex flex-row space-x-4">
-          <div className="flex flex-row w-fit space-x-4">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-56 justify-start text-left font-normal",
-                    !fromDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {fromDate ? format(fromDate, "PPP") : <span>Desde...</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={fromDate}
-                  onSelect={(date) => {
-                    setFromDate(date!);
-                  }}
-                  initialFocus
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              className="w-36 flex flex-row items-center justify-between"
+              variant={"success"}
+              size={"sm"}
+            >
+              Agregar código
+              <PlusIcon className="h-5 w-5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Edit profile</DialogTitle>
+              <DialogDescription>
+                Make changes to your profile here. Click save when you're done.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  defaultValue="Pedro Duarte"
+                  className="col-span-3"
                 />
-              </PopoverContent>
-            </Popover>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-56 justify-start text-left font-normal",
-                    !toDate && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {toDate ? format(toDate, "PPP") : <span>Hasta...</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={toDate}
-                  onSelect={(date) => {
-                    setToDate(date!);
-                  }}
-                  initialFocus
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Username
+                </Label>
+                <Input
+                  id="username"
+                  defaultValue="@peduarte"
+                  className="col-span-3"
                 />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"default"} size={"icon"}>
-                <Menu className="h-6 w-6" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Agregar asistencia manual</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleReport}>
-                Generar reporte en Excel
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit">Save changes</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -231,7 +186,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados
+                  No existen horarios registrados
                 </TableCell>
               </TableRow>
             )}

@@ -6,8 +6,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PersonalDataForm from "./PersonalDataForm";
 import MedicalDataForm from "./MedicalDataForm";
 import InstitutionalDataForm from "./InstitutionalDataForm";
+import AssistanceSection from "./AssistanceSection";
 
-export default function TabsForm() {
+export default function TabsForm({ personalId }: { personalId: number }) {
   const [tab, setTab] = useState("personalData");
 
   const handleChangeTab = (tab: string) => {
@@ -63,14 +64,15 @@ export default function TabsForm() {
       </TabsContent>
       <TabsContent value="medicalData">
         {/* <PersonalDataForm /> */}
-        <MedicalDataForm />
+        <MedicalDataForm personalId={personalId} />
       </TabsContent>
       <TabsContent value="institutionalData">
         <InstitutionalDataForm />
       </TabsContent>
       <TabsContent value="assistance">
         {/* <EmployeeForm /> */}
-        <p>Assistance data</p>
+        {/* <p>Assistance data</p> */}
+        <AssistanceSection />
       </TabsContent>
       <TabsContent value="cv">
         <p>CV data</p>

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { validateEcuadorianID } from "@/utils/identificationCardValidation";
 import {
+  BloodType,
   Category,
   City,
   Gender,
@@ -79,26 +80,21 @@ export const InstitutionalPersonalDataSchema = z.object({
 
 // Medical data
 
-export interface BloodType {
-  id: number;
-  name: string;
-}
-
 export interface MedicalPersonalData {
   id?: number;
   personalId: number;
-  PersonalData: PersonalData;
-  bloodTypeId: number;
-  BloodType: BloodType;
-  personalMedication: string;
-  personalDisease: string;
-  personalAllergy: string;
+  PersonalData?: PersonalData;
+  bloodTypeId?: number;
+  BloodType?: BloodType;
+  personalMedication?: string;
+  personalDisease?: string;
+  personalAllergy?: string;
 }
 
 export const MedicalPersonalDataSchema = z.object({
-  personalId: z.number().int().min(1, "Seleccione un empleado"),
-  bloodTypeId: z.number().int().min(1, "Seleccione un tipo de sangre"),
-  personalMedication: z.string().min(5, "Ingrese una medicación válida"),
-  personalDisease: z.string().min(5, "Ingrese una enfermedad válida"),
-  personalAllergy: z.string().min(5, "Ingrese una alergia válida"),
+  personalId: z.number().int().optional(),
+  bloodTypeId: z.number().int().optional(),
+  personalMedication: z.string().optional(),
+  personalDisease: z.string().optional(),
+  personalAllergy: z.string().optional(),
 });

@@ -67,3 +67,4 @@ export async function deleteEmployee(id: number) {
   console.log(data);
   return response.status;
 }
+

@@ -16,12 +16,14 @@ export default function TextAreaFormField({
   name,
   formLabel,
   placeholder = "",
+  defaultValue = "",
 }: {
   control: Control<FieldValues>;
   name: string;
   formLabel: string;
   type?: string;
   placeholder?: string;
+  defaultValue?: string;
 }) {
   return (
     <FormField
