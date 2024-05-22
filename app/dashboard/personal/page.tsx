@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import { Employee } from "@/models/personal";
+import { PersonalData } from "@/models/personal";
 import { deleteEmployee, getEmployees } from "@/lib/employeeAPIActions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -10,7 +10,7 @@ import { DataTable } from "@/components/Personal/DataTable";
 import { columns } from "@/components/Personal/columns";
 import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
 
-async function getData(): Promise<Employee[]> {
+async function getData(): Promise<PersonalData[]> {
   return await getEmployees();
 }
 
@@ -19,7 +19,7 @@ export default function Page() {
 
   const [open, setOpen] = useState(false);
   const [id, setId] = useState(0);
-  const [data, setData] = useState<Employee[]>([]);
+  const [data, setData] = useState<PersonalData[]>([]);
 
   useEffect(() => {
     getData().then((data) => {

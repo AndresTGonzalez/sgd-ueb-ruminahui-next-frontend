@@ -1,5 +1,7 @@
+"use server";
+
 import { getSessionData } from "@/auth/getSession";
-import { Employee } from "@/models/personal";
+import { PersonalData } from "@/models/personal";
 import { personalEndpoint } from "./constants";
 
 export async function getEmployees() {
@@ -24,7 +26,7 @@ export async function getEmployee(id: number) {
   return data;
 }
 
-export async function createEmployee(employee: Employee) {
+export async function createEmployee(employee: PersonalData) {
   const session = await getSessionData();
   const response = await fetch(personalEndpoint, {
     method: "POST",
@@ -39,7 +41,7 @@ export async function createEmployee(employee: Employee) {
   return statusCode;
 }
 
-export async function updateEmployee(employee: Employee) {
+export async function updateEmployee(employee: PersonalData) {
   const session = await getSessionData();
   const response = await fetch(`${personalEndpoint}/${employee.id}`, {
     method: "PUT",
@@ -62,5 +64,6 @@ export async function deleteEmployee(id: number) {
     },
   });
   const data = await response.json();
-  return data;
+  console.log(data);
+  return response.status;
 }

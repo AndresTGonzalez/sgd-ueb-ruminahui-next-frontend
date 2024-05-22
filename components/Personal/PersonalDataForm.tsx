@@ -20,11 +20,6 @@ import {
   getCitiesByProvince,
   getGenders,
   getCivilStatus,
-  getFunctions,
-  getLaboralRegimes,
-  getLaboralRelations,
-  getCategories,
-  getJournals,
 } from "@/lib/selectOptionsAPI";
 import { createEmployee, getEmployee } from "@/lib/employeeAPIActions";
 
@@ -147,7 +142,6 @@ export default function PersonalDataForm() {
                   placeholder="0"
                 />
                 {/* Tiej de hijos menores */}
-
               </div>
             </div>
             <div className="w-full grid grid-cols-2 gap-20">
@@ -183,6 +177,9 @@ export default function PersonalDataForm() {
                 placeholder="Dirección"
               />
             </div>
+          </div>
+          <div className="w-full h-fit flex flex-row justify-end">
+          <Button type="submit" variant={'success'}>Registrar empleado</Button>
           </div>
         </form>
       </Form>

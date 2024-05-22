@@ -12,14 +12,9 @@ import { Button } from "@/components/ui/button";
 import PersonalDataForm from "@/components/Personal/PersonalDataForm";
 import InstitutionalDataForm from "@/components/Personal/InstitutionalDataForm";
 import MedicalDataForm from "@/components/Personal/MedicalDataForm";
+import TabsForm from "@/components/Personal/TabsForm";
 
 export default function Page({ params }: { params: { id: number } }) {
-  const [tab, setTab] = useState("personalData");
-
-  const handleChangeTab = (tab: string) => {
-    setTab(tab);
-  };
-
   return (
     <div className="w-full h-full flex flex-col justify-between mx-auto py-10">
       <div className="flex flex-col space-y-3">
@@ -34,67 +29,7 @@ export default function Page({ params }: { params: { id: number } }) {
         </div>
         <Separator />
         <ScrollArea className="px-20 py-4">
-          <Tabs value={tab}>
-            <TabsList>
-              <TabsTrigger
-                value="personalData"
-                onClick={() => {
-                  handleChangeTab("personalData");
-                }}
-              >
-                Datos personales
-              </TabsTrigger>
-              <TabsTrigger
-                value="medicalData"
-                onClick={() => {
-                  handleChangeTab("medicalData");
-                }}
-              >
-                Datos médicos
-              </TabsTrigger>
-              <TabsTrigger
-                value="institutionalData"
-                onClick={() => {
-                  handleChangeTab("institutionalData");
-                }}
-              >
-                Datos institucionales
-              </TabsTrigger>
-              <TabsTrigger
-                value="assistance"
-                onClick={() => {
-                  handleChangeTab("assistance");
-                }}
-              >
-                Horarios y asistencia
-              </TabsTrigger>
-              <TabsTrigger
-                value="cv"
-                onClick={() => {
-                  handleChangeTab("cv");
-                }}
-              >
-                Hoja de vida
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="personalData">
-              <PersonalDataForm />
-            </TabsContent>
-            <TabsContent value="medicalData">
-              {/* <PersonalDataForm /> */}
-              <MedicalDataForm />
-            </TabsContent>
-            <TabsContent value="institutionalData">
-              <InstitutionalDataForm />
-            </TabsContent>
-            <TabsContent value="assistance">
-              {/* <EmployeeForm /> */}
-              <p>Assistance data</p>
-            </TabsContent>
-            <TabsContent value="cv">
-              <p>CV data</p>
-            </TabsContent>
-          </Tabs>
+          {params.id == 0 ? <PersonalDataForm /> : <TabsForm />}
         </ScrollArea>
       </div>
     </div>

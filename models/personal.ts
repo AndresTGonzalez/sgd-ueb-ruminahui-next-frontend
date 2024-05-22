@@ -1,6 +1,16 @@
 import { z } from "zod";
 import { validateEcuadorianID } from "@/utils/identificationCardValidation";
-import { City, Gender, MaritalStatus } from "./selectorOption";
+import {
+  Category,
+  City,
+  Gender,
+  Journal,
+  LaboralRegime,
+  LaboralRelationship,
+  MaritalStatus,
+} from "./selectorOption";
+
+// Personal data
 
 export interface PersonalData {
   id?: number;
@@ -38,3 +48,57 @@ export const PersonalDataSchema = z.object({
   provinceId: z.number().int().optional(),
 });
 
+// Institutional data
+export interface InstitutionalPersonalData {
+  id?: number;
+  personalId: number;
+  PersonalData: PersonalData;
+  functionId: number;
+  Function: Function;
+  laboralRegimeId: number;
+  LaboralRegime: LaboralRegime;
+  laboralRelationshipId: number;
+  LaboralRelationship: LaboralRelationship;
+  categoryId: number;
+  Category: Category;
+  journalId: number;
+  Journal: Journal;
+}
+
+export const InstitutionalPersonalDataSchema = z.object({
+  personalId: z.number().int().min(1, "Seleccione un empleado"),
+  functionId: z.number().int().min(1, "Seleccione una función"),
+  laboralRegimeId: z.number().int().min(1, "Seleccione un régimen laboral"),
+  laboralRelationshipId: z
+    .number()
+    .int()
+    .min(1, "Seleccione una relación laboral"),
+  categoryId: z.number().int().min(1, "Seleccione una categoría"),
+  journalId: z.number().int().min(1, "Seleccione un diario"),
+});
+
+// Medical data
+
+export interface BloodType {
+  id: number;
+  name: string;
+}
+
+export interface MedicalPersonalData {
+  id?: number;
+  personalId: number;
+  PersonalData: PersonalData;
+  bloodTypeId: number;
+  BloodType: BloodType;
+  personalMedication: string;
+  personalDisease: string;
+  personalAllergy: string;
+}
+
+export const MedicalPersonalDataSchema = z.object({
+  personalId: z.number().int().min(1, "Seleccione un empleado"),
+  bloodTypeId: z.number().int().min(1, "Seleccione un tipo de sangre"),
+  personalMedication: z.string().min(5, "Ingrese una medicación válida"),
+  personalDisease: z.string().min(5, "Ingrese una enfermedad válida"),
+  personalAllergy: z.string().min(5, "Ingrese una alergia válida"),
+});

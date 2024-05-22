@@ -29,39 +29,19 @@ import {
 import { createEmployee, getEmployee } from "@/lib/employeeAPIActions";
 
 import { City } from "@/models/selectorOption";
-import { Employee, employeeSchema } from "@/models/personal";
 import { toast } from "sonner";
+import { MedicalPersonalDataSchema } from "@/models/personal";
 
 export default function MedicalDataForm() {
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof employeeSchema>>({
-    resolver: zodResolver(employeeSchema),
+  const form = useForm<z.infer<typeof MedicalPersonalDataSchema>>({
+    resolver: zodResolver(MedicalPersonalDataSchema),
   });
 
-  const onSubmit = async (formData: z.infer<typeof employeeSchema>) => {
-    const newEmployee: Employee = {
-      identificationCard: formData.identificationCard,
-      names: formData.names,
-      lastNames: formData.lastNames,
-      phone: formData.phone,
-      email: formData.email,
-      birthdate: formData.birthdate,
-      childrens: formData.childrens,
-      address: formData.address,
-      genderId: formData.genderId,
-      maritalStatusId: formData.maritalStatusId,
-      cityId: formData.cityId,
-    };
-
-    const response = await createEmployee(newEmployee);
-    if (response === 201) {
-      toast.success("Empleado registrado exitosamente");
-      router.push("/dashboard/personal");
-    } else {
-      toast.error("Error al registrar el empleado");
-    }
-  };
+  const onSubmit = async (
+    formData: z.infer<typeof MedicalPersonalDataSchema>
+  ) => {};
 
   return (
     <div className="w-full h-full flex flex-col px-8">
