@@ -60,14 +60,14 @@ export default function TabsForm({ personalId }: { personalId: number }) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="personalData">
-        <PersonalDataForm />
+        <PersonalDataForm personalId={personalId} />
       </TabsContent>
       <TabsContent value="medicalData">
         {/* <PersonalDataForm /> */}
         <MedicalDataForm personalId={personalId} />
       </TabsContent>
       <TabsContent value="institutionalData">
-        <InstitutionalDataForm />
+        <InstitutionalDataForm personalId={personalId} />
       </TabsContent>
       <TabsContent value="assistance">
         {/* <EmployeeForm /> */}

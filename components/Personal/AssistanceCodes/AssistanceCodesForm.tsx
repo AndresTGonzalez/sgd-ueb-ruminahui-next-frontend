@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Control, FieldValues, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -31,6 +33,8 @@ export function AssistanceCodesForm({
   handleNew: (data: CreateAssistancePersonalIdentificatorDTO) => void;
   personalId: number;
 }) {
+  const [open, setOpen] = useState(false);
+
   const form = useForm<z.infer<typeof AssistancePersonalIdentificatorSchema>>({
     resolver: zodResolver(AssistancePersonalIdentificatorSchema),
   });
@@ -46,9 +50,11 @@ export function AssistanceCodesForm({
     };
     handleNew(newCode);
     //cerrar modal
+    setOpen(false);
   };
   return (
     <Dialog
+      open={open}
       onOpenChange={(isOpen) => {
         if (!isOpen) {
           form.reset();
@@ -60,6 +66,7 @@ export function AssistanceCodesForm({
           className="w-36 flex flex-row items-center justify-between"
           variant={"success"}
           size={"sm"}
+          onClick={() => setOpen(true)}
         >
           Nuevo código
           <PlusIcon className="h-5 w-5" />
@@ -86,9 +93,21 @@ export function AssistanceCodesForm({
                 name="code"
                 type="text"
               />
-              <Button type="submit" variant={"success"}>
-                Guardar cambios
-              </Button>
+              <div className="w-full grid grid-cols-2 gap-10">
+                <Button
+                  variant={"destructive"}
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    form.reset();
+                  }}
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit" variant={"success"}>
+                  Guardar cambios
+                </Button>
+              </div>
             </div>
           </form>
         </Form>

@@ -41,7 +41,7 @@ export default function SelectFormField({
   defaultValue?: number;
 }) {
   const [items, setItems] = useState<SelectorOption[]>([]);
-  const [initialValue, setInitialValue] = useState("A+");
+  const [initialValue, setInitialValue] = useState("");
   useEffect(() => {
     if (options) {
       setItems(options);

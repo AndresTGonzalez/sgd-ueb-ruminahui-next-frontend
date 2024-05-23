@@ -27,14 +27,53 @@ import { City, SelectorOption } from "@/models/selectorOption";
 import { PersonalData, PersonalDataSchema } from "@/models/personal";
 import { toast } from "sonner";
 
-export default function PersonalDataForm() {
+export default function PersonalDataForm({
+  personalId,
+}: {
+  personalId: number;
+}) {
   const router = useRouter();
 
-  const [provinceId, setProvinceId] = useState<number>();
+  // const [provinceId, setProvinceId] = useState<number>();
+  const [initialProvinceId, setInitialProvinceId] = useState<number>();
+  const [initialCityId, setInitialCityId] = useState<number>();
+  const [initialGenderId, setInitialGenderId] = useState<number>();
+  const [initialMaritalStatusId, setInitialMaritalStatusId] =
+    useState<number>();
 
   const form = useForm<z.infer<typeof PersonalDataSchema>>({
     resolver: zodResolver(PersonalDataSchema),
   });
+
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      if (personalId === 0) return;
+      const employee = await getEmployee(personalId);
+      const data = employee
+      console.log(data);
+      if (data) {
+        form.reset(data);
+        setInitialProvinceId(data.provinceId);
+        setInitialCityId(data.cityId);
+        setInitialGenderId(data.genderId);
+        setInitialMaritalStatusId(data.maritalStatusId);
+      } else return;
+    };
+    fetchEmployee();  
+
+    // const fetchMedicalData = async () => {
+    //   if (personalId === 0) return;
+    //   const medicalData = await getMedicalPersonalData(personalId);
+    //   const data = medicalData[0];
+    //   if (data) {
+    //     form.reset(data);
+    //     setMedicalData(data);
+    //     setIsEdit(true);
+    //     setInitialBloodType(data.bloodTypeId);
+    //   } else return;
+    // };
+    // fetchMedicalData();
+  }, []);
 
   const onSubmit = async (formData: z.infer<typeof PersonalDataSchema>) => {
     const newEmployee: PersonalData = {
@@ -81,6 +120,7 @@ export default function PersonalDataForm() {
                 formLabel="Género"
                 fetchItems={getGenders}
                 placeholder="Género"
+                defaultValue={initialGenderId}
               />
             </div>
             <div className="w-full grid grid-cols-2 gap-20">
@@ -132,6 +172,7 @@ export default function PersonalDataForm() {
                   formLabel="Estado civil"
                   fetchItems={getCivilStatus}
                   placeholder="Estado civil"
+                  defaultValue={initialMaritalStatusId}
                 />
                 {/* Numero de hijos */}
                 <InputFormField
@@ -152,6 +193,7 @@ export default function PersonalDataForm() {
                 formLabel="Provincia"
                 fetchItems={getProvinces}
                 placeholder="Provincia"
+                defaultValue={initialProvinceId}
               />
               {/* Ciudades */}
               <SelectFormField
@@ -159,6 +201,7 @@ export default function PersonalDataForm() {
                 name="cityId"
                 formLabel="Ciudad"
                 placeholder="Ciudad"
+                defaultValue={initialCityId}
                 fetchItems={async () => {
                   const provinceId = form.getValues("provinceId");
                   if (provinceId) {
@@ -179,7 +222,9 @@ export default function PersonalDataForm() {
             </div>
           </div>
           <div className="w-full h-fit flex flex-row justify-end">
-          <Button type="submit" variant={'success'}>Registrar empleado</Button>
+            <Button type="submit" variant={"success"}>
+              Registrar empleado
+            </Button>
           </div>
         </form>
       </Form>

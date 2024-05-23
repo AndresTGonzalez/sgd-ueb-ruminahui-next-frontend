@@ -52,8 +52,8 @@ const ActionColumn: Partial<ColumnDef<AssistancePersonalIdentificator>> = {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={handleView}>Visualizar</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem>
+            {/* <DropdownMenuItem onClick={handleView}>Visualizar</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem> */}
             <DropdownMenuItem onClick={selectRow}>Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

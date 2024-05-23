@@ -109,7 +109,6 @@ export default function MedicalDataForm({
                 formLabel="Alergias"
                 placeholder="Alergias"
                 // defaultValue={medicalData?.personalAllergy}
-                defaultValue={"Test"}
               />
               {/* Enfermedades */}
               <TextAreaFormField

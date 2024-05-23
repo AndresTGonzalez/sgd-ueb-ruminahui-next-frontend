@@ -13,8 +13,11 @@ import { DataTable as SchedulesTable } from "./Schedules/DataTable";
 import { columns as SchedulesColumns } from "./Schedules/columns";
 import {
   createAssistancePersonalIdentificator,
+  deleteAssistancePersonalIdentificator,
   getAssistancePersonalIdentificator,
 } from "@/lib/assistancePersonalIdentificatorAPIActions";
+import { toast } from "sonner";
+import { DeleteAlertDialog } from "../Misc/DeleteAlertDialog";
 
 async function getAssistanceIdentificator(): Promise<
   AssistancePersonalIdentificator[]
@@ -33,18 +36,51 @@ export default function AssistanceSection({
     AssistancePersonalIdentificator[]
   >([]);
 
+  const [open, setOpen] = useState(false);
+  const [id, setId] = useState(0);
+
   useEffect(() => {
     getAssistanceIdentificator().then((data) => {
       setAssistanceIdentificator(data);
     });
   }, []);
 
+  const selectRow = (id: number) => {
+    setId(id);
+    setOpen(true);
+  };
+
   const handleNew = async (
     formData: CreateAssistancePersonalIdentificatorDTO
   ) => {
-    console.log("Datos del formulario recibidos en el abuelo:", formData);
-    // Aquí puedes ejecutar cualquier lógica adicional con los datos
     const response = await createAssistancePersonalIdentificator(formData);
+    console.log(response);
+    // Si se ejecuta correctamente, se debe agregar el registro a la tabla
+    if (response) {
+      // assistanceIdentificator.push(response);
+      const newData: AssistancePersonalIdentificator = {
+        id: response.id,
+        code: response.code,
+        dispositive: response.AssistanceDispositive.name,
+      };
+      setAssistanceIdentificator([...assistanceIdentificator, newData]);
+
+      toast.success("Código de asistencia creado correctamente");
+    } else {
+      toast.error("Error al crear el código de asistencia");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    const response = await deleteAssistancePersonalIdentificator(id);
+    if (response === 200) {
+      setAssistanceIdentificator(
+        assistanceIdentificator.filter((item) => item.id !== id)
+      );
+      toast.success("Código de asistencia eliminado correctamente");
+    } else {
+      toast.error("Error al eliminar el código de asistencia");
+    }
   };
 
   return (
@@ -62,6 +98,20 @@ export default function AssistanceSection({
           data={assistanceIdentificator}
           personalId={personalId}
           handleNew={handleNew}
+          selectRow={selectRow}
+        />
+        <DeleteAlertDialog
+          open={open}
+          id={id}
+          handleCancel={() => {
+            setOpen(false);
+          }}
+          handleDelete={async () => {
+            handleDelete(id);
+            setOpen(false);
+          }}
+          title="Eliminar campus"
+          message="¿Está seguro que desea eliminar este campus?"
         />
       </div>
     </div>

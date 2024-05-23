@@ -22,22 +22,90 @@ import {
 } from "@/lib/selectOptionsAPI";
 
 import {
+  InstitutionalPersonalData,
   InstitutionalPersonalDataSchema,
   PersonalData,
   PersonalDataSchema,
 } from "@/models/personal";
 import { toast } from "sonner";
+import {
+  createInstitutionalPersonalData,
+  getInstitutionalPersonalData,
+  updateInstitutionalPersonalData,
+} from "@/lib/institutionalPersonalDataAPIAction";
 
-export default function InstitutionalDataForm() {
+export default function InstitutionalDataForm({
+  personalId,
+}: {
+  personalId: number;
+}) {
+  const [isEdit, setIsEdit] = useState(false);
+  const [institutionalData, setInstitutionalData] =
+    useState<InstitutionalPersonalData | null>(null);
+
+  const [initialFunction, setInitialFunction] = useState();
+  const [initialLaboralRegime, setInitialLaboralRegime] = useState();
+  const [initialLaboralRelationship, setInitialLaboralRelationship] =
+    useState();
+  const [initialCategory, setInitialCategory] = useState();
+  const [initialJournal, setInitialJournal] = useState();
+
   const router = useRouter();
-
+  
   const form = useForm<z.infer<typeof InstitutionalPersonalDataSchema>>({
     resolver: zodResolver(InstitutionalPersonalDataSchema),
   });
 
+  useEffect(() => {
+    const fetchInstitutionalData = async () => {
+      if (personalId === 0) return;
+      const institutionalData = await getInstitutionalPersonalData(personalId);
+      const data = institutionalData[0];
+      if (data) {
+        form.reset(data);
+        setInstitutionalData(data);
+        setIsEdit(true);
+        setInitialFunction(data.functionId);
+        setInitialLaboralRegime(data.laboralRegimeId);
+        setInitialLaboralRelationship(data.laboralRelationshipId);
+        setInitialCategory(data.categoryId);
+        setInitialJournal(data.journalId);
+      } else return;
+    };
+
+    fetchInstitutionalData();
+  }, []);
+
   const onSubmit = async (
     formData: z.infer<typeof InstitutionalPersonalDataSchema>
-  ) => {};
+  ) => {
+    const newData: InstitutionalPersonalData = {
+      personalId: Number(personalId),
+      functionId: formData.functionId,
+      laboralRegimeId: formData.laboralRegimeId,
+      laboralRelationshipId: formData.laboralRelationshipId,
+      categoryId: formData.categoryId,
+      journalId: formData.journalId,
+    };
+
+    if (!isEdit) {
+      const response = await createInstitutionalPersonalData(newData);
+      if (response === 201) {
+        toast.success("Datos institucionales registrados exitosamente");
+      } else {
+        toast.error("Error al registrar los datos institucionales");
+      }
+    } else {
+      // newData.id = Number(form.getValues("id"));
+      newData.id = institutionalData?.id as number;
+      const response = await updateInstitutionalPersonalData(newData);
+      if (response === 200) {
+        toast.success("Datos institucionales actualizados exitosamente");
+      } else {
+        toast.error("Error al actualizar los datos institucionales");
+      }
+    }
+  };
 
   return (
     <div className="w-full h-full flex flex-col px-8">
@@ -53,6 +121,7 @@ export default function InstitutionalDataForm() {
                 formLabel="Función"
                 fetchItems={getFunctions}
                 placeholder="Función"
+                defaultValue={initialFunction}
               />
               {/* Regimén Laboral */}
               <SelectFormField
@@ -61,6 +130,7 @@ export default function InstitutionalDataForm() {
                 formLabel="Régimen laboral"
                 fetchItems={getLaboralRegimes}
                 placeholder="Régimen laboral"
+                defaultValue={initialLaboralRegime}
               />
             </div>
             <div className="w-full grid grid-cols-2 gap-20">
@@ -71,6 +141,7 @@ export default function InstitutionalDataForm() {
                 formLabel="Relación laboral"
                 fetchItems={getLaboralRelations}
                 placeholder="Relación laboral"
+                defaultValue={initialLaboralRelationship}
               />
               {/* Categorias */}
               <SelectFormField
@@ -80,9 +151,10 @@ export default function InstitutionalDataForm() {
                 fetchItems={getCategories}
                 placeholder="Categoría"
                 optionStartLabel="Categoría"
+                defaultValue={initialCategory}
               />
             </div>
-            <div className="w-full grid grid-cols-2 gap-20">
+            <div className="w-full grid grid-cols-1 gap-20">
               {/* Jornada */}
               <SelectFormField
                 control={form.control as unknown as Control<FieldValues>}
@@ -90,7 +162,13 @@ export default function InstitutionalDataForm() {
                 formLabel="Jornada"
                 fetchItems={getJournals}
                 placeholder="Jornada"
+                defaultValue={initialJournal}
               />
+            </div>
+            <div className="w-full flex flex-row justify-end">
+              <Button type="submit" variant={"success"}>
+                Guardar
+              </Button>
             </div>
           </div>
         </form>

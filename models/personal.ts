@@ -53,21 +53,20 @@ export const PersonalDataSchema = z.object({
 export interface InstitutionalPersonalData {
   id?: number;
   personalId: number;
-  PersonalData: PersonalData;
+  PersonalData?: PersonalData;
   functionId: number;
-  Function: Function;
+  Function?: Function;
   laboralRegimeId: number;
-  LaboralRegime: LaboralRegime;
+  LaboralRegime?: LaboralRegime;
   laboralRelationshipId: number;
-  LaboralRelationship: LaboralRelationship;
+  LaboralRelationship?: LaboralRelationship;
   categoryId: number;
-  Category: Category;
+  Category?: Category;
   journalId: number;
-  Journal: Journal;
+  Journal?: Journal;
 }
 
 export const InstitutionalPersonalDataSchema = z.object({
-  personalId: z.number().int().min(1, "Seleccione un empleado"),
   functionId: z.number().int().min(1, "Seleccione una función"),
   laboralRegimeId: z.number().int().min(1, "Seleccione un régimen laboral"),
   laboralRelationshipId: z

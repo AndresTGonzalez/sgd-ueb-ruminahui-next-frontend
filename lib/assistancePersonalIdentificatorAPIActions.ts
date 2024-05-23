@@ -33,3 +33,18 @@ export async function createAssistancePersonalIdentificator(
   console.log(response);
   return await response.json();
 }
+
+export async function deleteAssistancePersonalIdentificator(id: number) {
+  const session = await getSessionData();
+  const response = await fetch(
+    `${assistancePersonalIdentificatorEndpoint}/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    }
+  );
+  console.log(response);
+  return response.status;
+}
