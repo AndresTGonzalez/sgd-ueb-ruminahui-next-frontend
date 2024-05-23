@@ -101,7 +101,7 @@ export const MedicalPersonalDataSchema = z.object({
 // Schedule
 export interface PersonalSchedule {
   id?: number;
-  personalId?: number;
+  personalId: number;
   Personal?: PersonalData;
   dayOfWeek: number;
   start: string;
@@ -109,7 +109,7 @@ export interface PersonalSchedule {
 }
 
 export const PersonalScheduleSchema = z.object({
-  id: z.number().int().optional(),
+  // id: z.number().int().optional(),
   dayOfWeek: z.number().int().min(1, "Seleccione un día de la semana"),
   start: z.string().min(5, "Ingrese una hora de inicio"),
   end: z.string().min(5, "Ingrese una hora de fin"),

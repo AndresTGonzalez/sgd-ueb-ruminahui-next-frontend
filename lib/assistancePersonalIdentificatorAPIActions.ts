@@ -2,10 +2,7 @@
 
 import { getSessionData } from "@/auth/getSession";
 import { assistancePersonalIdentificatorEndpoint } from "./constants";
-import {
-  AssistancePersonalIdentificator,
-  CreateAssistancePersonalIdentificatorDTO,
-} from "@/models/assistancePersonalIdentificator";
+import { CreateAssistancePersonalIdentificatorDTO } from "@/models/assistancePersonalIdentificator";
 
 export async function getAssistancePersonalIdentificator() {
   const session = await getSessionData();

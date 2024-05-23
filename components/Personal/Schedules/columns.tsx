@@ -14,7 +14,7 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-import { PersonalData } from "@/models/personal";
+import { PersonalData, PersonalSchedule } from "@/models/personal";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
@@ -25,7 +25,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-const ActionColumn: Partial<ColumnDef<PersonalData>> = {
+const ActionColumn: Partial<ColumnDef<PersonalSchedule>> = {
   cell: ({ getValue, row: { index }, column: { id }, table }) => {
     const initialValue = getValue() as number;
 
@@ -51,8 +51,8 @@ const ActionColumn: Partial<ColumnDef<PersonalData>> = {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={handleView}>Visualizar</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem>
+            {/* <DropdownMenuItem onClick={handleView}>Visualizar</DropdownMenuItem> */}
+            {/* <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem> */}
             <DropdownMenuItem onClick={selectRow}>Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -61,20 +61,33 @@ const ActionColumn: Partial<ColumnDef<PersonalData>> = {
   },
 };
 
-export const columns: ColumnDef<PersonalData>[] = [
+export const columns: ColumnDef<PersonalSchedule>[] = [
   {
-    accessorKey: "identificationCard",
+    accessorKey: "dayOfWeek",
     header: "Día",
+    cell: ({ getValue }) => {
+      const day = getValue() as number;
+      const days = [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+      ];
+      return days[day];
+    },
   },
   {
-    accessorKey: "identificationCard",
+    accessorKey: "start",
     header: "Entrada",
   },
   {
-    accessorKey: "identificationCard",
+    accessorKey: "end",
     header: "Salida",
   },
-  
+
   {
     accessorKey: "id",
     header: "",

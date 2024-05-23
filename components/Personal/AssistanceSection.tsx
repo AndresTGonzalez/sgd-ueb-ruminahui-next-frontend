@@ -18,6 +18,12 @@ import {
 } from "@/lib/assistancePersonalIdentificatorAPIActions";
 import { toast } from "sonner";
 import { DeleteAlertDialog } from "../Misc/DeleteAlertDialog";
+import { PersonalSchedule } from "@/models/personal";
+import {
+  createPersonalSchedule,
+  deletePersonalSchedule,
+  getPersonalSchedules,
+} from "@/lib/personalSchedulesAPIActions";
 
 async function getAssistanceIdentificator(): Promise<
   AssistancePersonalIdentificator[]
@@ -35,22 +41,61 @@ export default function AssistanceSection({
   const [assistanceIdentificator, setAssistanceIdentificator] = useState<
     AssistancePersonalIdentificator[]
   >([]);
+  const [personalSchedules, setPersonalSchedules] = useState<
+    PersonalSchedule[]
+  >([]);
 
-  const [open, setOpen] = useState(false);
-  const [id, setId] = useState(0);
+  const [openCodeDelete, setOpenCodeDelete] = useState(false);
+  const [openScheduleDelete, setOpenScheduleDelete] = useState(false);
+  // const [id, setId] = useState(0);
+
+  const [scheduleId, setScheduleId] = useState(0);
+  const [codeId, setCodeId] = useState(0);
 
   useEffect(() => {
     getAssistanceIdentificator().then((data) => {
       setAssistanceIdentificator(data);
     });
+    getPersonalSchedules(personalId).then((data) => {
+      // console.log(data);
+      setPersonalSchedules(data);
+    });
   }, []);
 
-  const selectRow = (id: number) => {
-    setId(id);
-    setOpen(true);
+  const selectRowCode = (id: number) => {
+    // setId(id);
+    // setOpen(true);
+    setCodeId(id);
+    setOpenCodeDelete(true);
   };
 
-  const handleNew = async (
+  const selectRowSchedule = (id: number) => {
+    setScheduleId(id);
+    setOpenScheduleDelete(true);
+  };
+
+  const handleNewSchedule = async (formData: PersonalSchedule) => {
+    // console.log(formData);
+    const response = await createPersonalSchedule(formData);
+    console.log(response);
+    // Si se ejecuta correctamente, se debe agregar el registro a la tabla
+    if (response) {
+      // personalSchedules.push(response);
+      const newData: PersonalSchedule = {
+        personalId: response.personalId,
+        id: response.id,
+        dayOfWeek: response.dayOfWeek,
+        start: response.start,
+        end: response.end,
+      };
+      setPersonalSchedules([...personalSchedules, newData]);
+      toast.success("Horario creado correctamente");
+    } else {
+      toast.error("Error al crear el horario");
+    }
+  };
+
+  const handleNewCode = async (
     formData: CreateAssistancePersonalIdentificatorDTO
   ) => {
     const response = await createAssistancePersonalIdentificator(formData);
@@ -71,7 +116,7 @@ export default function AssistanceSection({
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteCode = async (id: number) => {
     const response = await deleteAssistancePersonalIdentificator(id);
     if (response === 200) {
       setAssistanceIdentificator(
@@ -83,12 +128,41 @@ export default function AssistanceSection({
     }
   };
 
+  const handleDeleteSchedule = async (id: number) => {
+    const response = await deletePersonalSchedule(id);
+    if (response === 200) {
+      setPersonalSchedules(personalSchedules.filter((item) => item.id !== id));
+      toast.success("Horario eliminado correctamente");
+    } else {
+      toast.error("Error al eliminar el horario");
+    }
+  };
+
   return (
     <div className="w-full h-fit flex flex-row">
       <div className="w-1/2 h-96 p-8">
         <h3>Horarios:</h3>
         <Separator />
-        <SchedulesTable columns={SchedulesColumns} data={[]} />
+        <SchedulesTable
+          columns={SchedulesColumns}
+          data={personalSchedules}
+          personalId={personalId}
+          handleNew={handleNewSchedule}
+          selectRow={selectRowSchedule}
+        />
+        <DeleteAlertDialog
+          open={openScheduleDelete}
+          id={scheduleId}
+          handleCancel={() => {
+            setOpenScheduleDelete(false);
+          }}
+          handleDelete={async () => {
+            handleDeleteSchedule(scheduleId);
+            setOpenScheduleDelete(false);
+          }}
+          title="Eliminar horario"
+          message="¿Está seguro que desea eliminar este horario?"
+        />
       </div>
       <div className="w-1/2 h-96 p-8">
         <h3>Códigos de asistencia:</h3>
@@ -97,21 +171,21 @@ export default function AssistanceSection({
           columns={AssistanceCodesColumns}
           data={assistanceIdentificator}
           personalId={personalId}
-          handleNew={handleNew}
-          selectRow={selectRow}
+          handleNew={handleNewCode}
+          selectRow={selectRowCode}
         />
         <DeleteAlertDialog
-          open={open}
-          id={id}
+          open={openCodeDelete}
+          id={codeId}
           handleCancel={() => {
-            setOpen(false);
+            setOpenCodeDelete(false);
           }}
           handleDelete={async () => {
-            handleDelete(id);
-            setOpen(false);
+            handleDeleteCode(codeId);
+            setOpenCodeDelete(false);
           }}
-          title="Eliminar campus"
-          message="¿Está seguro que desea eliminar este campus?"
+          title="Eliminar código de asistencia"
+          message="¿Está seguro que desea eliminar este código de asistencia?"
         />
       </div>
     </div>

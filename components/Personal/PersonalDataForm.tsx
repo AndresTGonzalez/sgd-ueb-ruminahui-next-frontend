@@ -49,30 +49,19 @@ export default function PersonalDataForm({
     const fetchEmployee = async () => {
       if (personalId === 0) return;
       const employee = await getEmployee(personalId);
-      const data = employee
-      console.log(data);
+      const data = employee;
+      // Setear la propiedad del formulario provinceId
+      form.setValue("provinceId", data.City.provinceId);
+      console.log(form.getValues("provinceId"));
       if (data) {
         form.reset(data);
-        setInitialProvinceId(data.provinceId);
+        setInitialProvinceId(data.City.provinceId);
         setInitialCityId(data.cityId);
         setInitialGenderId(data.genderId);
         setInitialMaritalStatusId(data.maritalStatusId);
       } else return;
     };
-    fetchEmployee();  
-
-    // const fetchMedicalData = async () => {
-    //   if (personalId === 0) return;
-    //   const medicalData = await getMedicalPersonalData(personalId);
-    //   const data = medicalData[0];
-    //   if (data) {
-    //     form.reset(data);
-    //     setMedicalData(data);
-    //     setIsEdit(true);
-    //     setInitialBloodType(data.bloodTypeId);
-    //   } else return;
-    // };
-    // fetchMedicalData();
+    fetchEmployee();
   }, []);
 
   const onSubmit = async (formData: z.infer<typeof PersonalDataSchema>) => {
@@ -203,9 +192,9 @@ export default function PersonalDataForm({
                 placeholder="Ciudad"
                 defaultValue={initialCityId}
                 fetchItems={async () => {
-                  const provinceId = form.getValues("provinceId");
-                  if (provinceId) {
-                    return getCitiesByProvince(provinceId as number);
+                  // const provinceId = form.getValues("provinceId");
+                  if (initialProvinceId) {
+                    return getCitiesByProvince(initialProvinceId as number);
                   } else {
                     return [];
                   }

@@ -6,3 +6,4 @@ export const assistanceEndpoint = `${host}/api/assistance`;
 export const medicalPersonalDataEndpoint = `${host}/api/medical-personal-data`;
 export const assistancePersonalIdentificatorEndpoint = `${host}/api/assistance-personal-identificator`;
 export const institutionalPersonalDataEndpoint = `${host}/api/institutional-personal-data`;
+export const personalSchedulesEndpoint = `${host}/api/personal-schedule`;
