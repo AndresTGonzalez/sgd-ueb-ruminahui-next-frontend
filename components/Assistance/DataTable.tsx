@@ -16,7 +16,7 @@ import {
 
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-import { Menu } from "lucide-react";
+import { Menu, RefreshCw } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -62,6 +62,7 @@ interface DataTableProps<TData, TValue> {
   setFromDate: (date: Date) => void;
   setToDate: (date: Date) => void;
   handleReport?: () => void;
+  handleSync?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -76,6 +77,7 @@ export function DataTable<TData, TValue>({
   toDate,
   setToDate,
   handleReport,
+  handleSync,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -173,6 +175,10 @@ export function DataTable<TData, TValue>({
               </PopoverContent>
             </Popover>
           </div>
+          {/* Actualizar Button */}
+          <Button variant={"secondary"} size={"icon"} onClick={handleSync}>
+            <RefreshCw className="h-6 w-6" />
+          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"default"} size={"icon"}>

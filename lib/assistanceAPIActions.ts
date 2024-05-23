@@ -39,3 +39,17 @@ export async function downloadExcelReport(startDate: Date, endDate: Date) {
   link.click();
   link.remove();
 }
+
+export async function syncAssistance() {
+  const session = await getSessionData();
+  const response = await fetch(`${assistanceEndpoint}/sync`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  // const data = await response.;
+  // console.log(data);
+  console.log("response.status: ", response.status);
+  return response.status;
+}
