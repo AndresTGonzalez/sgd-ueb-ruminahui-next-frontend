@@ -15,6 +15,7 @@ import {
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
 import { PersonalData } from "@/models/personal";
+import { AssistancePersonalIdentificator } from "@/models/assistancePersonalIdentificator";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
@@ -25,7 +26,7 @@ declare module "@tanstack/react-table" {
   }
 }
 
-const ActionColumn: Partial<ColumnDef<PersonalData>> = {
+const ActionColumn: Partial<ColumnDef<AssistancePersonalIdentificator>> = {
   cell: ({ getValue, row: { index }, column: { id }, table }) => {
     const initialValue = getValue() as number;
 
@@ -61,15 +62,15 @@ const ActionColumn: Partial<ColumnDef<PersonalData>> = {
   },
 };
 
-export const columns: ColumnDef<PersonalData>[] = [
+export const columns: ColumnDef<AssistancePersonalIdentificator>[] = [
   {
-    accessorKey: "identificationCard",
-    header: "Sede",
+    accessorKey: "dispositive",
+    header: "Dispositivo",
     enableResizing: false, //disable resizing for just this column
     size: 200, //starting column size
   },
   {
-    accessorKey: "identificationCard",
+    accessorKey: "code",
     header: "Codigo",
     enableResizing: false, //disable resizing for just this column
     size: 200, //starting column size

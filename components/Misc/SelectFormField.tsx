@@ -41,18 +41,28 @@ export default function SelectFormField({
   defaultValue?: number;
 }) {
   const [items, setItems] = useState<SelectorOption[]>([]);
-  const [initialValue, setInitialValue] = useState<number>(0);
+  const [initialValue, setInitialValue] = useState("A+");
   useEffect(() => {
     if (options) {
       setItems(options);
-      // setInitialValue(options[0].id);
     } else if (fetchItems) {
       fetchItems().then((data) => {
         setItems(data);
-        // setInitialValue(data[0].id);
       });
     }
   }, [options, fetchItems]);
+
+  // Usar el placeHolder para mostrar el valor inicial
+  useEffect(() => {
+    if (defaultValue) {
+      const item = items.find((item) => item.id === defaultValue);
+      if (item) {
+        setInitialValue(optionStartLabel + " " + item.name);
+      }
+    } else {
+      setInitialValue(placeholder);
+    }
+  }, [items, defaultValue]);
 
   return (
     <FormField
@@ -62,8 +72,6 @@ export default function SelectFormField({
         <FormItem>
           <FormLabel>{formLabel}</FormLabel>
           <Select
-            // defaultValue={value.toString()}
-            // value={initialValue.toString()}
             onValueChange={
               handleChange
                 ? (value) => handleChange(value)
@@ -72,7 +80,7 @@ export default function SelectFormField({
           >
             <FormControl>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder={placeholder} />
+                <SelectValue placeholder={initialValue} aria-label="A+" />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

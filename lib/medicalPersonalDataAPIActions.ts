@@ -37,3 +37,24 @@ export async function createMedicalPersonalData(
   const statusCode = response.status;
   return statusCode;
 }
+
+// Update medical personal data
+export async function updateMedicalPersonalData(
+  medicalPersonalData: MedicalPersonalData
+) {
+  const session = await getSessionData();
+  const response = await fetch(
+    `${medicalPersonalDataEndpoint}/${medicalPersonalData.id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session}`,
+      },
+      body: JSON.stringify(medicalPersonalData),
+    }
+  );
+  const data = await response.json();
+  const statusCode = response.status;
+  return statusCode;
+}

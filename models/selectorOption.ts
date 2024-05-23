@@ -25,3 +25,8 @@ export interface Category extends SelectorOption {}
 export interface Journal extends SelectorOption {}
 
 export interface BloodType extends SelectorOption {}
+
+export interface Hour {
+  id: string;
+  name: string;
+}

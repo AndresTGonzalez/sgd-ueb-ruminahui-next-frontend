@@ -65,9 +65,16 @@ export const columns: ColumnDef<PersonalData>[] = [
   {
     accessorKey: "identificationCard",
     header: "Día",
-    enableResizing: false, //disable resizing for just this column
-    size: 200, //starting column size
   },
+  {
+    accessorKey: "identificationCard",
+    header: "Entrada",
+  },
+  {
+    accessorKey: "identificationCard",
+    header: "Salida",
+  },
+  
   {
     accessorKey: "id",
     header: "",

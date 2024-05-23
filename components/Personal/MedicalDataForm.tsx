@@ -22,6 +22,7 @@ import {
 import {
   createMedicalPersonalData,
   getMedicalPersonalData,
+  updateMedicalPersonalData,
 } from "@/lib/medicalPersonalDataAPIActions";
 
 export default function MedicalDataForm({
@@ -29,19 +30,31 @@ export default function MedicalDataForm({
 }: {
   personalId: number;
 }) {
-  const [medicalData, setMedicalData] = useState<MedicalPersonalData>();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getMedicalPersonalData(personalId);
-      form.reset(data);
-    };
-    fetchData();
-  }, [personalId]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [initialBloodType, setInitialBloodType] = useState(0);
+  const [medicalData, setMedicalData] = useState<MedicalPersonalData | null>(
+    null
+  );
 
   const form = useForm<z.infer<typeof MedicalPersonalDataSchema>>({
     resolver: zodResolver(MedicalPersonalDataSchema),
   });
+
+  useEffect(() => {
+    const fetchMedicalData = async () => {
+      if (personalId === 0) return;
+      const medicalData = await getMedicalPersonalData(personalId);
+      const data = medicalData[0];
+      if (data) {
+        form.reset(data);
+        setMedicalData(data);
+        setIsEdit(true);
+        setInitialBloodType(data.bloodTypeId);
+      } else return;
+    };
+
+    fetchMedicalData();
+  }, []);
 
   const onSubmit = async (
     formData: z.infer<typeof MedicalPersonalDataSchema>
@@ -54,11 +67,22 @@ export default function MedicalDataForm({
       personalAllergy: formData.personalAllergy,
     };
 
-    const response = await createMedicalPersonalData(newData);
-    if (response === 201) {
-      toast.success("Datos médicos registrados exitosamente");
+    if (!isEdit) {
+      const response = await createMedicalPersonalData(newData);
+      if (response === 201) {
+        toast.success("Datos médicos registrados exitosamente");
+      } else {
+        toast.error("Error al registrar los datos médicos");
+      }
     } else {
-      toast.error("Error al registrar los datos médicos");
+      // newData.id = Number(form.getValues("id"));
+      newData.id = medicalData?.id as number;
+      const response = await updateMedicalPersonalData(newData);
+      if (response === 200) {
+        toast.success("Datos médicos actualizados exitosamente");
+      } else {
+        toast.error("Error al actualizar los datos médicos");
+      }
     }
   };
 
@@ -76,6 +100,7 @@ export default function MedicalDataForm({
                 formLabel="Tipo de sangre"
                 fetchItems={getBloodTypes}
                 placeholder="Tipo de sangre"
+                defaultValue={initialBloodType}
               />
               {/* Alergias */}
               <TextAreaFormField

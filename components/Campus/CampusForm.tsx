@@ -38,7 +38,6 @@ export default function CampusForm({ campusId }: { campusId: number }) {
       };
       //Se actualiza el campus
       const response = await updateCampus(updateCampusData);
-      console.log("response", response);
       if (response === 200) {
         toast.success("Campus actualizado exitosamente");
         router.push("/dashboard/sedes");

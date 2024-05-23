@@ -8,29 +8,45 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { PersonalScheduleSchema } from "@/models/personal";
 import { PlusIcon } from "@radix-ui/react-icons";
 import SelectFormField from "@/components/Misc/SelectFormField";
 import InputFormField from "@/components/Misc/InputFormField";
 import { daysOfTheWeekOptions } from "@/utils/constantsOptions";
+import { getAssistanceDispisitve } from "@/lib/selectOptionsAPI";
+import {
+  AssistancePersonalIdentificatorSchema,
+  CreateAssistancePersonalIdentificatorDTO,
+} from "@/models/assistancePersonalIdentificator";
 
-const onSubmit = (data: z.infer<typeof PersonalScheduleSchema>) => {
-  console.log(data);
-};
-
-export function SchedulesFormDialog() {
-  const form = useForm<z.infer<typeof PersonalScheduleSchema>>({
-    resolver: zodResolver(PersonalScheduleSchema),
+export function AssistanceCodesForm({
+  handleNew,
+  personalId,
+}: {
+  handleNew: (data: CreateAssistancePersonalIdentificatorDTO) => void;
+  personalId: number;
+}) {
+  const form = useForm<z.infer<typeof AssistancePersonalIdentificatorSchema>>({
+    resolver: zodResolver(AssistancePersonalIdentificatorSchema),
   });
 
+  const onSubmit = (
+    data: z.infer<typeof AssistancePersonalIdentificatorSchema>
+  ) => {
+    // console.log(data);
+    const newCode: CreateAssistancePersonalIdentificatorDTO = {
+      code: data.code,
+      assistanceDispositiveId: data.dispositiveId,
+      personalId: Number(personalId),
+    };
+    handleNew(newCode);
+    //cerrar modal
+  };
   return (
     <Dialog
       onOpenChange={(isOpen) => {
@@ -45,35 +61,30 @@ export function SchedulesFormDialog() {
           variant={"success"}
           size={"sm"}
         >
-          Nuevo horario
+          Nuevo código
           <PlusIcon className="h-5 w-5" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Agregar horario</DialogTitle>
+          <DialogTitle>Agregar código de asistencia</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid gap-4 py-4">
               <SelectFormField
                 control={form.control as unknown as Control<FieldValues>}
-                formLabel="Día"
-                name="dayOfWeek"
-                options={daysOfTheWeekOptions}
-                placeholder="Día de la semana"
+                formLabel="Dispositivo"
+                name="dispositiveId"
+                // options={daysOfTheWeekOptions}
+                fetchItems={getAssistanceDispisitve}
+                placeholder="Dispositivo de asistencia"
               />
               <InputFormField
                 control={form.control as unknown as Control<FieldValues>}
-                formLabel="Hora de entrada"
-                name="start"
-                type="time"
-              />
-              <InputFormField
-                control={form.control as unknown as Control<FieldValues>}
-                formLabel="Hora de salida"
-                name="end"
-                type="time"
+                formLabel="Código de asistencia"
+                name="code"
+                type="text"
               />
               <Button type="submit" variant={"success"}>
                 Guardar cambios

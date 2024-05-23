@@ -92,9 +92,26 @@ export interface MedicalPersonalData {
 }
 
 export const MedicalPersonalDataSchema = z.object({
-  personalId: z.number().int().optional(),
+  // personalId: z.number().int().optional(),
   bloodTypeId: z.number().int().optional(),
   personalMedication: z.string().optional(),
   personalDisease: z.string().optional(),
   personalAllergy: z.string().optional(),
+});
+
+// Schedule
+export interface PersonalSchedule {
+  id?: number;
+  personalId?: number;
+  Personal?: PersonalData;
+  dayOfWeek: number;
+  start: string;
+  end: string;
+}
+
+export const PersonalScheduleSchema = z.object({
+  id: z.number().int().optional(),
+  dayOfWeek: z.number().int().min(1, "Seleccione un día de la semana"),
+  start: z.string().min(5, "Ingrese una hora de inicio"),
+  end: z.string().min(5, "Ingrese una hora de fin"),
 });

@@ -72,7 +72,7 @@ export default function TabsForm({ personalId }: { personalId: number }) {
       <TabsContent value="assistance">
         {/* <EmployeeForm /> */}
         {/* <p>Assistance data</p> */}
-        <AssistanceSection />
+        <AssistanceSection personalId={personalId} />
       </TabsContent>
       <TabsContent value="cv">
         <p>CV data</p>
