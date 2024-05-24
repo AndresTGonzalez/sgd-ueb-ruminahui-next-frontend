@@ -57,14 +57,11 @@ export default function AssistanceSection({
       setAssistanceIdentificator(data);
     });
     getPersonalSchedules(personalId).then((data) => {
-      // console.log(data);
       setPersonalSchedules(data);
     });
   }, []);
 
   const selectRowCode = (id: number) => {
-    // setId(id);
-    // setOpen(true);
     setCodeId(id);
     setOpenCodeDelete(true);
   };

@@ -114,3 +114,38 @@ export const PersonalScheduleSchema = z.object({
   start: z.string().min(5, "Ingrese una hora de inicio"),
   end: z.string().min(5, "Ingrese una hora de fin"),
 });
+
+// CV
+// Titles
+export interface PersonalTitles {
+  id?: number;
+  personalId: number;
+  Personal?: PersonalData;
+  title: string;
+  institution: string;
+  completitionYear: number;
+}
+
+export const PersonalTitlesSchema = z.object({
+  // id: z.number().int().optional(),
+  title: z.string().min(3, "Ingrese un título válido"),
+  institution: z.string().min(3, "Ingrese una institución válida"),
+  completitionYear: z.number().int().min(1900, "Ingrese un año válido"),
+});
+
+// Certifications
+export interface PersonalCertifications {
+  id?: number;
+  personalId: number;
+  Personal?: PersonalData;
+  certification: string;
+  institution: string;
+  completitionYear: number;
+}
+
+export const PersonalCertificationsSchema = z.object({
+  // id: z.number().int().optional(),
+  certification: z.string().min(3, "Ingrese un certificado válido"),
+  institution: z.string().min(3, "Ingrese una institución válida"),
+  completitionYear: z.number().int().min(1900, "Ingrese un año válido"),
+});

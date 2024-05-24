@@ -13,31 +13,17 @@ import {
   ColumnFiltersState,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { DateRange } from "react-day-picker";
-
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-
-import { Calendar as CalendarIcon } from "lucide-react";
-import { Menu, RefreshCw } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Calendar } from "@/components/ui/calendar";
 
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 import { Input } from "@/components/ui/input";
 
@@ -52,20 +38,19 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { CreateAssistancePersonalIdentificatorDTO } from "@/models/assistancePersonalIdentificator";
+import { TitlesForm } from "./TitlesForm";
+import { PersonalTitles } from "@/models/personal";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  personalId: number;
   handleDelete?: (id: number) => void;
   handleEdit?: (id: number) => void;
   selectRow?: (id: number) => void;
   handleView?: (id: number) => void;
-  fromDate: Date;
-  toDate: Date;
-  setFromDate: (date: Date) => void;
-  setToDate: (date: Date) => void;
-  handleReport?: () => void;
-  handleSync?: () => void;
+  handleNew?: (data: PersonalTitles) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -75,20 +60,13 @@ export function DataTable<TData, TValue>({
   handleEdit,
   selectRow,
   handleView,
-  fromDate,
-  setFromDate,
-  toDate,
-  setToDate,
-  handleReport,
-  handleSync,
+  handleNew,
+  personalId,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
-  const [date, setDate] = React.useState<DateRange | undefined>();
-
   const router = useRouter();
 
   const table = useReactTable({
@@ -122,73 +100,7 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex flex-row items-center justify-between py-4">
-        <div className="flex flex-row space-x-4">
-          <Input
-            placeholder="Filtrar personal..."
-            value={(table.getColumn("names")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("names")?.setFilterValue(event.target.value)
-            }
-            className="w-72"
-          />
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                id="date"
-                variant={"outline"}
-                className={cn(
-                  "w-[300px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date?.from ? (
-                  date.to ? (
-                    <>
-                      {format(date.from, "LLL dd, y")} -{" "}
-                      {format(date.to, "LLL dd, y")}
-                    </>
-                  ) : (
-                    format(date.from, "LLL dd, y")
-                  )
-                ) : (
-                  <span>Rango de fechas...</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                locale={es}
-                initialFocus
-                mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={1}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-        <div className="flex flex-row space-x-4">
-          {/* <div className="flex flex-row w-fit space-x-4"></div> */}
-          {/* Actualizar Button */}
-          <Button variant={"secondary"} size={"icon"} onClick={handleSync}>
-            <RefreshCw className="h-6 w-6" />
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"default"} size={"icon"}>
-                <Menu className="h-6 w-6" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Agregar asistencia manual</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleReport}>
-                Generar reporte en Excel
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <TitlesForm personalId={personalId} handleNew={handleNew!} />
       </div>
       <div className="rounded-md border">
         <Table>
@@ -233,7 +145,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No se encontraron resultados
+                  No existen títulos registrados
                 </TableCell>
               </TableRow>
             )}

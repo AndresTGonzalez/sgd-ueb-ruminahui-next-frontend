@@ -38,3 +38,16 @@ export const daysOfTheWeekOptions: SelectorOption[] = [
   { id: 6, name: "Sábado" },
   { id: 7, name: "Domingo" },
 ];
+
+// Years
+export function getLast100Years(): { id: number; name: string }[] {
+  const currentYear = new Date().getFullYear();
+  const years = [];
+
+  for (let i = 0; i < 100; i++) {
+    const year = currentYear - i;
+    years.push({ id: year, name: year.toString() });
+  }
+
+  return years;
+}

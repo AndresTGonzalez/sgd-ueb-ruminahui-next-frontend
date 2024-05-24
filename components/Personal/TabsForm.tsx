@@ -7,6 +7,7 @@ import PersonalDataForm from "./PersonalDataForm";
 import MedicalDataForm from "./MedicalDataForm";
 import InstitutionalDataForm from "./InstitutionalDataForm";
 import AssistanceSection from "./AssistanceSection";
+import CVTabs from "./CV/CVTabs";
 
 export default function TabsForm({ personalId }: { personalId: number }) {
   const [tab, setTab] = useState("personalData");
@@ -60,7 +61,7 @@ export default function TabsForm({ personalId }: { personalId: number }) {
         </TabsTrigger>
       </TabsList>
       <TabsContent value="personalData">
-        <PersonalDataForm personalId={personalId} />
+        <PersonalDataForm personalId={Number(personalId)} />
       </TabsContent>
       <TabsContent value="medicalData">
         {/* <PersonalDataForm /> */}
@@ -75,7 +76,8 @@ export default function TabsForm({ personalId }: { personalId: number }) {
         <AssistanceSection personalId={personalId} />
       </TabsContent>
       <TabsContent value="cv">
-        <p>CV data</p>
+        {/* <p>CV data</p> */}
+        <CVTabs personalId={personalId} />
       </TabsContent>
     </Tabs>
   );

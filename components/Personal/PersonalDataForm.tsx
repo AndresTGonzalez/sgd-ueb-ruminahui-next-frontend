@@ -34,6 +34,8 @@ export default function PersonalDataForm({
 }) {
   const router = useRouter();
 
+  const [cities, setCities] = useState<City[]>([]);
+
   // const [provinceId, setProvinceId] = useState<number>();
   const [initialProvinceId, setInitialProvinceId] = useState<number>();
   const [initialCityId, setInitialCityId] = useState<number>();
@@ -45,15 +47,21 @@ export default function PersonalDataForm({
     resolver: zodResolver(PersonalDataSchema),
   });
 
+  const handleProvinceChange = async (value: string) => {
+    const provinceId = parseInt(value);
+    getCitiesByProvince(provinceId).then((data) => {
+      setCities(data);
+    });
+  };
+
   useEffect(() => {
     const fetchEmployee = async () => {
       if (personalId === 0) return;
       const employee = await getEmployee(personalId);
       const data = employee;
+      console.log(data);
       // Setear la propiedad del formulario provinceId
-      form.setValue("provinceId", data.City.provinceId);
-      console.log(form.getValues("provinceId"));
-      if (data) {
+      if (data.statusCode !== 400) {
         form.reset(data);
         setInitialProvinceId(data.City.provinceId);
         setInitialCityId(data.cityId);
@@ -176,30 +184,53 @@ export default function PersonalDataForm({
             </div>
             <div className="w-full grid grid-cols-2 gap-20">
               {/* Provincia */}
-              <SelectFormField
-                control={form.control as unknown as Control<FieldValues>}
-                name="provinceId"
-                formLabel="Provincia"
-                fetchItems={getProvinces}
-                placeholder="Provincia"
-                defaultValue={initialProvinceId}
-              />
+              {initialProvinceId ? (
+                <SelectFormField
+                  control={form.control as unknown as Control<FieldValues>}
+                  name="provinceId"
+                  formLabel="Provincia"
+                  fetchItems={getProvinces}
+                  placeholder="Provincia"
+                  defaultValue={initialProvinceId}
+                />
+              ) : (
+                <SelectFormField
+                  control={form.control as unknown as Control<FieldValues>}
+                  name="provinceId"
+                  formLabel="Provincia"
+                  fetchItems={getProvinces}
+                  placeholder="Provincia"
+                  // defaultValue={initialProvinceId}
+                  handleChange={handleProvinceChange}
+                />
+              )}
               {/* Ciudades */}
-              <SelectFormField
-                control={form.control as unknown as Control<FieldValues>}
-                name="cityId"
-                formLabel="Ciudad"
-                placeholder="Ciudad"
-                defaultValue={initialCityId}
-                fetchItems={async () => {
-                  // const provinceId = form.getValues("provinceId");
-                  if (initialProvinceId) {
-                    return getCitiesByProvince(initialProvinceId as number);
-                  } else {
-                    return [];
-                  }
-                }}
-              />
+              {/* Si hay un initial value devuelve un component sino hay devuelve otro */}
+
+              {initialProvinceId ? (
+                <SelectFormField
+                  control={form.control as unknown as Control<FieldValues>}
+                  name="cityId"
+                  formLabel="Ciudad"
+                  placeholder="Ciudad"
+                  defaultValue={initialCityId}
+                  fetchItems={async () => {
+                    if (initialProvinceId) {
+                      return getCitiesByProvince(initialProvinceId as number);
+                    } else {
+                      return [];
+                    }
+                  }}
+                />
+              ) : (
+                <SelectFormField
+                  control={form.control as unknown as Control<FieldValues>}
+                  name="cityId"
+                  formLabel="Ciudad"
+                  placeholder="Ciudad"
+                  options={cities}
+                />
+              )}
             </div>
             <div className="w-full grid grid-cols-1">
               <TextAreaFormField
