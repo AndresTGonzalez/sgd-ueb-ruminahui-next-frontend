@@ -9,3 +9,4 @@ export const institutionalPersonalDataEndpoint = `${host}/api/institutional-pers
 export const personalSchedulesEndpoint = `${host}/api/personal-schedule`;
 export const titlesEndpoint = `${host}/api/title`;
 export const certificationsEndpoint = `${host}/api/certification`;
+export const justificationEndpoint = `${host}/api/justification`;
