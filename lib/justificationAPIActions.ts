@@ -2,6 +2,7 @@
 
 import { getSessionData } from "@/auth/getSession";
 import { justificationEndpoint } from "./constants";
+import { formatDateToEcuadorian } from "@/utils/misc";
 
 // Find all justifications
 export async function getJustifications() {
@@ -12,7 +13,15 @@ export async function getJustifications() {
     },
   });
   const data = await response.json();
-  return data;
+
+  const justifications = data.map((justification: any) => {
+    justification.applicationDate = formatDateToEcuadorian(justification.applicationDate);
+    return justification;
+  });
+
+  console.log(justifications);
+
+  return justifications;
 }
 
 // Find justifications between two dates
@@ -24,8 +33,6 @@ export async function getJustificationsBetweenDates(
   const toDateISO = toDate.toISOString();
   const session = await getSessionData();
   const response = await fetch(
-    // `${justificationEndpoint}/betweenDates?startDate=${'2024-01-01'}&endDate=${'2025-01-01'}`,
-    // `${justificationEndpoint}/between-dates?startDate=2024-01-01&endDate=2025-01-01`,
     `${justificationEndpoint}/between-dates?startDate=${fromDateISO}&endDate=${toDateISO}`,
     {
       headers: {
@@ -34,6 +41,10 @@ export async function getJustificationsBetweenDates(
     }
   );
   const data = await response.json();
-  console.log(data);
+
+  data.forEach((justification: any) => {
+    justification.date = formatDateToEcuadorian(justification.date);
+  });
+
   return data;
 }

@@ -15,9 +15,14 @@ import {
   getJustificationsBetweenDates,
 } from "@/lib/justificationAPIActions";
 import { Justification } from "@/models/justification";
+import { getEmployeesForSelect } from "@/lib/employeeAPIActions";
 
 async function getData(): Promise<Justification[]> {
   return await getJustifications();
+}
+
+async function getPersonalOptions(): Promise<any> {
+  return await getEmployeesForSelect();
 }
 
 export default function Page() {
@@ -27,9 +32,14 @@ export default function Page() {
   const [fromDate, setFromDate] = useState<Date | undefined>();
   const [toDate, setToDate] = useState<Date | undefined>();
 
+  const [personalOptions, setPersonalOptions] = useState([]);
+
   useEffect(() => {
     getData().then((data) => {
       setData(data);
+    });
+    getPersonalOptions().then((data) => {
+      setPersonalOptions(data);
     });
   }, []);
 
@@ -43,9 +53,6 @@ export default function Page() {
     } else {
       toast.error("Debe seleccionar una fecha de inicio y una fecha de fin");
     }
-    console.log("Filtering data");
-    console.log(fromDate?.toISOString());
-    console.log(toDate?.toISOString());
   };
 
   const handleView = (id: number) => {
@@ -61,6 +68,7 @@ export default function Page() {
         setToDate={setToDate}
         setFromDate={setFromDate}
         handleFilter={handleFilter}
+        personalOptions={personalOptions}
       />
     </div>
   );

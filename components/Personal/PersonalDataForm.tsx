@@ -59,7 +59,6 @@ export default function PersonalDataForm({
       if (personalId === 0) return;
       const employee = await getEmployee(personalId);
       const data = employee;
-      console.log(data);
       // Setear la propiedad del formulario provinceId
       if (data.statusCode !== 400) {
         form.reset(data);
@@ -80,7 +79,7 @@ export default function PersonalDataForm({
       phone: formData.phone,
       email: formData.email,
       birthdate: formData.birthdate,
-      childrens: formData.childrens,
+      // childrens: formData.childrens,
       address: formData.address,
       genderId: formData.genderId,
       maritalStatusId: formData.maritalStatusId,
@@ -172,13 +171,7 @@ export default function PersonalDataForm({
                   defaultValue={initialMaritalStatusId}
                 />
                 {/* Numero de hijos */}
-                <InputFormField
-                  control={form.control as unknown as Control<FieldValues>}
-                  name="childrens"
-                  formLabel="Número de hijos"
-                  type="number"
-                  placeholder="0"
-                />
+
                 {/* Tiej de hijos menores */}
               </div>
             </div>

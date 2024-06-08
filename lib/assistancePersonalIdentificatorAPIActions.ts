@@ -15,6 +15,23 @@ export async function getAssistancePersonalIdentificator() {
   return data;
 }
 
+// Get by personalId
+export async function getAssistancePersonalIdentificatorByPersonalId(
+  personalId: number
+) {
+  const session = await getSessionData();
+  const response = await fetch(
+    `${assistancePersonalIdentificatorEndpoint}/personal/${personalId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    }
+  );
+  const data = await response.json();
+  return data;
+}
+
 export async function createAssistancePersonalIdentificator(
   data: CreateAssistancePersonalIdentificatorDTO
 ) {

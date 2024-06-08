@@ -124,3 +124,17 @@ export async function getAssistanceDispisitve(): Promise<SelectorOption[]> {
   const data = await response.json();
   return data;
 }
+
+// Get sucursales
+export async function getCampus(): Promise<SelectorOption[]> {
+  console.log("getCampus");
+  const session = await getSessionData();
+  const response = await fetch(`${host}/api/campus`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  console.log(data as SelectorOption[]);
+  return data;
+}

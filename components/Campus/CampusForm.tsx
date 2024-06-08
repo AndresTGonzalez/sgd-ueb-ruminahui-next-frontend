@@ -24,7 +24,6 @@ export default function CampusForm({ campusId }: { campusId: number }) {
   const router = useRouter();
 
   const handleCancel = () => {
-    console.log("cancel");
     router.replace("/dashboard/sedes");
   };
 

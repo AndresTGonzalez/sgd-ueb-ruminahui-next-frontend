@@ -48,8 +48,5 @@ export async function syncAssistance() {
       Authorization: `Bearer ${session}`,
     },
   });
-  // const data = await response.;
-  // console.log(data);
-  console.log("response.status: ", response.status);
   return response.status;
 }

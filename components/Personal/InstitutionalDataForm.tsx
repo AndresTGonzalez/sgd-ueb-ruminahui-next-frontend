@@ -13,12 +13,15 @@ import SelectFormField from "../Misc/SelectFormField";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 
+import MultipleSelector, { Option } from "@/components/ui/multiple-selector";
+
 import {
   getFunctions,
   getLaboralRegimes,
   getLaboralRelations,
   getCategories,
   getJournals,
+  getCampus,
 } from "@/lib/selectOptionsAPI";
 
 import {
@@ -33,12 +36,29 @@ import {
   getInstitutionalPersonalData,
   updateInstitutionalPersonalData,
 } from "@/lib/institutionalPersonalDataAPIAction";
+import MultipleSelectorField from "../Misc/MultipleSelectorField";
+import CheckBoxMultiSelectField from "../Misc/CheckBoxMultiSelectField";
 
 export default function InstitutionalDataForm({
   personalId,
 }: {
   personalId: number;
 }) {
+  // todo: Eliminar luego de probar
+  const OPTIONS: Option[] = [
+    { label: "nextjs", value: "nextjs" },
+    { label: "React", value: "react" },
+    { label: "Remix", value: "remix" },
+    { label: "Vite", value: "vite" },
+    { label: "Nuxt", value: "nuxt" },
+    { label: "Vue", value: "vue" },
+    { label: "Svelte", value: "svelte" },
+    { label: "Angular", value: "angular" },
+    { label: "Ember", value: "ember", disable: true },
+    { label: "Gatsby", value: "gatsby", disable: true },
+    { label: "Astro", value: "astro" },
+  ];
+
   const [isEdit, setIsEdit] = useState(false);
   const [institutionalData, setInstitutionalData] =
     useState<InstitutionalPersonalData | null>(null);
@@ -51,7 +71,7 @@ export default function InstitutionalDataForm({
   const [initialJournal, setInitialJournal] = useState();
 
   const router = useRouter();
-  
+
   const form = useForm<z.infer<typeof InstitutionalPersonalDataSchema>>({
     resolver: zodResolver(InstitutionalPersonalDataSchema),
   });
@@ -63,6 +83,7 @@ export default function InstitutionalDataForm({
       const data = institutionalData[0];
       if (data) {
         form.reset(data);
+        form.setValue("campus", [1]);
         setInstitutionalData(data);
         setIsEdit(true);
         setInitialFunction(data.functionId);
@@ -163,6 +184,16 @@ export default function InstitutionalDataForm({
                 fetchItems={getJournals}
                 placeholder="Jornada"
                 defaultValue={initialJournal}
+              />
+            </div>
+            <div className="w-full grid grid-cols-1 gap-20">
+              <CheckBoxMultiSelectField
+                control={form.control as unknown as Control<FieldValues>}
+                name="campus"
+                formLabel="Sedes institucionales"
+                placeholder="Tecnologías"
+                fetchItems={getCampus}
+                defaultValue={[1]}
               />
             </div>
             <div className="w-full flex flex-row justify-end">

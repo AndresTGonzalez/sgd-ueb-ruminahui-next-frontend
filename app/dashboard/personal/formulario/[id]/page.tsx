@@ -26,7 +26,7 @@ export default function Page({ params }: { params: { id: number } }) {
         {/* <ScrollArea className="px-20 py-4"> */}
         <div className="px-20 py-4">
           {params.id == 0 ? (
-            <PersonalDataForm />
+            <PersonalDataForm personalId={Number(params.id)} />
           ) : (
             <TabsForm personalId={params.id} />
           )}

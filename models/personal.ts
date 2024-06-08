@@ -21,7 +21,7 @@ export interface PersonalData {
   phone: string;
   email: string;
   birthdate: Date;
-  childrens: number;
+  // childrens: number;
   address: string;
   genderId: number;
   gender?: Gender;
@@ -41,7 +41,7 @@ export const PersonalDataSchema = z.object({
   phone: z.string().min(8, "Ingrese un número de teléfono válido"),
   email: z.string().email("Ingrese un correo electrónico válido"),
   birthdate: z.date(),
-  childrens: z.number().int().min(0, "Ingrese un número válido"),
+  // childrens: z.number().int().min(0, "Ingrese un número válido"),
   address: z.string().min(5, "Ingrese una dirección válida"),
   genderId: z.number().int().min(1, "Seleccione un género"),
   maritalStatusId: z.number().int().min(1, "Seleccione un estado civil"),
@@ -64,6 +64,7 @@ export interface InstitutionalPersonalData {
   Category?: Category;
   journalId: number;
   Journal?: Journal;
+  campus?: number[];
 }
 
 export const InstitutionalPersonalDataSchema = z.object({
@@ -75,6 +76,8 @@ export const InstitutionalPersonalDataSchema = z.object({
     .min(1, "Seleccione una relación laboral"),
   categoryId: z.number().int().min(1, "Seleccione una categoría"),
   journalId: z.number().int().min(1, "Seleccione un diario"),
+  // Campus es opcional
+  campus: z.array(z.number().int()).optional(),
 });
 
 // Medical data

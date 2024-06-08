@@ -18,7 +18,7 @@ import { DateRange } from "react-day-picker";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { Menu, RefreshCw } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -51,7 +51,13 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
-import { PlusIcon } from "@heroicons/react/24/solid";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -67,6 +73,7 @@ interface DataTableProps<TData, TValue> {
   handleReport?: () => void;
   handleSync?: () => void;
   handleFilter?: () => void;
+  personalOptions: any[];
 }
 
 export function DataTable<TData, TValue>({
@@ -83,6 +90,7 @@ export function DataTable<TData, TValue>({
   handleReport,
   handleSync,
   handleFilter,
+  personalOptions,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -90,6 +98,31 @@ export function DataTable<TData, TValue>({
   );
 
   const [date, setDate] = React.useState<DateRange | undefined>();
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState<string>("");
+
+  const frameworks = [
+    {
+      value: "next.js",
+      label: "Next.js",
+    },
+    {
+      value: "sveltekit",
+      label: "SvelteKit",
+    },
+    {
+      value: "nuxt.js",
+      label: "Nuxt.js",
+    },
+    {
+      value: "remix",
+      label: "Remix",
+    },
+    {
+      value: "astro",
+      label: "Astro",
+    },
+  ];
 
   const router = useRouter();
 

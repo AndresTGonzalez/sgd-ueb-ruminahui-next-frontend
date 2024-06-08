@@ -40,13 +40,6 @@ export function SchedulesFormDialog({
   });
 
   const onSubmit = (data: z.infer<typeof PersonalScheduleSchema>) => {
-    // console.log(data);
-    // const newCode: CreateAssistancePersonalIdentificatorDTO = {
-    //   code: data.code,
-    //   assistanceDispositiveId: data.dispositiveId,
-    //   personalId: Number(personalId),
-    // };
-    // handleNew(newCode);
     const newSchedule: PersonalSchedule = {
       dayOfWeek: data.dayOfWeek,
       start: data.start,

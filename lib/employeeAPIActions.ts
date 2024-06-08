@@ -15,6 +15,20 @@ export async function getEmployees() {
   return data;
 }
 
+export async function getEmployeesForSelect() {
+  const session = await getSessionData();
+  const response = await fetch(personalEndpoint, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  return data.map((employee: PersonalData) => ({
+    value: employee.id,
+    label: `${employee.names} ${employee.lastNames}`,
+  }));
+}
+
 export async function getEmployee(id: number) {
   const session = await getSessionData();
   const response = await fetch(`${personalEndpoint}/${id}`, {
@@ -67,4 +81,3 @@ export async function deleteEmployee(id: number) {
   console.log(data);
   return response.status;
 }
-

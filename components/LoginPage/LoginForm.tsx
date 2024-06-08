@@ -21,7 +21,6 @@ const onSubmit = async (formData: z.infer<typeof userSchema>) => {
   };
 
   const response = await signIn(user);
-  console.log(response);
   await getSessionData();
 };
 

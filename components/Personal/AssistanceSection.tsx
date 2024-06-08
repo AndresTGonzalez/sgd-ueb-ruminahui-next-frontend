@@ -15,6 +15,7 @@ import {
   createAssistancePersonalIdentificator,
   deleteAssistancePersonalIdentificator,
   getAssistancePersonalIdentificator,
+  getAssistancePersonalIdentificatorByPersonalId,
 } from "@/lib/assistancePersonalIdentificatorAPIActions";
 import { toast } from "sonner";
 import { DeleteAlertDialog } from "../Misc/DeleteAlertDialog";
@@ -25,10 +26,10 @@ import {
   getPersonalSchedules,
 } from "@/lib/personalSchedulesAPIActions";
 
-async function getAssistanceIdentificator(): Promise<
-  AssistancePersonalIdentificator[]
-> {
-  return await getAssistancePersonalIdentificator();
+async function getAssistanceIdentificator(
+  personalId: number
+): Promise<AssistancePersonalIdentificator[]> {
+  return await getAssistancePersonalIdentificatorByPersonalId(personalId);
 }
 
 // Agregar para horarios
@@ -53,7 +54,7 @@ export default function AssistanceSection({
   const [codeId, setCodeId] = useState(0);
 
   useEffect(() => {
-    getAssistanceIdentificator().then((data) => {
+    getAssistanceIdentificator(Number(personalId)).then((data) => {
       setAssistanceIdentificator(data);
     });
     getPersonalSchedules(personalId).then((data) => {
@@ -74,7 +75,6 @@ export default function AssistanceSection({
   const handleNewSchedule = async (formData: PersonalSchedule) => {
     // console.log(formData);
     const response = await createPersonalSchedule(formData);
-    console.log(response);
     // Si se ejecuta correctamente, se debe agregar el registro a la tabla
     if (response) {
       // personalSchedules.push(response);
@@ -96,7 +96,6 @@ export default function AssistanceSection({
     formData: CreateAssistancePersonalIdentificatorDTO
   ) => {
     const response = await createAssistancePersonalIdentificator(formData);
-    console.log(response);
     // Si se ejecuta correctamente, se debe agregar el registro a la tabla
     if (response) {
       // assistanceIdentificator.push(response);
