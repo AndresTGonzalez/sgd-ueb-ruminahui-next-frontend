@@ -16,7 +16,6 @@ import {
   EllipsisVerticalIcon,
   ArrowsUpDownIcon,
 } from "@heroicons/react/24/solid";
-import { Employee } from "@/models/personal";
 import { Assistance } from "@/models/assistance";
 
 declare module "@tanstack/react-table" {
@@ -112,15 +111,43 @@ export const columns: ColumnDef<Assistance>[] = [
   {
     accessorKey: "clockCheck",
     header: "Registro de reloj",
+  //   cell: ({ getValue }) => {
+  //     // Formatear la fecha en DD:MM:YYYY HH:MM:SS
+  //     const value = getValue() as string | number | Date;
+  //     const date = new Date(value);
+
+  //     return date.toLocaleString();
+  //   },
+  // },
   },
   {
-    accessorKey: "onTime",
+    accessorKey: "assistanceStatusId",
     header: "A tiempo",
     cell: ({ getValue }) => {
       // return getValue() ? "Sí" : "No";
       return (
-        <Badge variant={getValue() ? "success" : "destructive"}>
-          {getValue() ? "A tiempo" : "Atraso o inconsistencia"}
+        // <Badge variant={getValue() ? "success" : "destructive"}>
+        //   {getValue() ? "A tiempo" : "Atraso o inconsistencia"}
+        // </Badge>
+        // Si es 1, es a tiempo, si es 2, es atraso, 3 es falta y 4 es inconsistencia
+        <Badge
+          variant={
+            getValue() === 1
+              ? "success"
+              : getValue() === 2
+              ? "danger"
+              : getValue() === 3
+              ? "destructive"
+              : "default"
+          }
+        >
+          {getValue() === 1
+            ? "A tiempo"
+            : getValue() === 2
+            ? "Atraso"
+            : getValue() === 3
+            ? "Falta"
+            : "Inconsistencia"}
         </Badge>
       );
     },

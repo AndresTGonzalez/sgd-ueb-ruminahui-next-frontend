@@ -125,9 +125,15 @@ export function DataTable<TData, TValue>({
         <div className="flex flex-row space-x-4">
           <Input
             placeholder="Filtrar personal..."
-            value={(table.getColumn("names")?.getFilterValue() as string) ?? ""}
+            value={
+              (table
+                .getColumn("identificationCard")
+                ?.getFilterValue() as string) ?? ""
+            }
             onChange={(event) =>
-              table.getColumn("names")?.setFilterValue(event.target.value)
+              table
+                .getColumn("identificationCard")
+                ?.setFilterValue(event.target.value)
             }
             className="w-72"
           />

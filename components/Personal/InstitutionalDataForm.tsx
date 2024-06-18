@@ -83,7 +83,7 @@ export default function InstitutionalDataForm({
       const data = institutionalData[0];
       if (data) {
         form.reset(data);
-        form.setValue("campus", [1]);
+        // form.setValue("campus", [1]);
         setInstitutionalData(data);
         setIsEdit(true);
         setInitialFunction(data.functionId);
@@ -109,23 +109,24 @@ export default function InstitutionalDataForm({
       journalId: formData.journalId,
     };
 
-    if (!isEdit) {
-      const response = await createInstitutionalPersonalData(newData);
-      if (response === 201) {
-        toast.success("Datos institucionales registrados exitosamente");
-      } else {
-        toast.error("Error al registrar los datos institucionales");
-      }
-    } else {
-      // newData.id = Number(form.getValues("id"));
-      newData.id = institutionalData?.id as number;
-      const response = await updateInstitutionalPersonalData(newData);
-      if (response === 200) {
-        toast.success("Datos institucionales actualizados exitosamente");
-      } else {
-        toast.error("Error al actualizar los datos institucionales");
-      }
-    }
+    console.log(formData.campus);
+    // if (!isEdit) {
+    //   const response = await createInstitutionalPersonalData(newData);
+    //   if (response === 201) {
+    //     toast.success("Datos institucionales registrados exitosamente");
+    //   } else {
+    //     toast.error("Error al registrar los datos institucionales");
+    //   }
+    // } else {
+    //   // newData.id = Number(form.getValues("id"));
+    //   newData.id = institutionalData?.id as number;
+    //   const response = await updateInstitutionalPersonalData(newData);
+    //   if (response === 200) {
+    //     toast.success("Datos institucionales actualizados exitosamente");
+    //   } else {
+    //     toast.error("Error al actualizar los datos institucionales");
+    //   }
+    // }
   };
 
   return (
@@ -191,7 +192,7 @@ export default function InstitutionalDataForm({
                 control={form.control as unknown as Control<FieldValues>}
                 name="campus"
                 formLabel="Sedes institucionales"
-                placeholder="Tecnologías"
+                placeholder="Campus"
                 fetchItems={getCampus}
                 defaultValue={[1]}
               />

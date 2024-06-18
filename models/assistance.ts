@@ -4,5 +4,6 @@ export type Assistance = {
   names: string;
   lastNames: string;
   clockCheck: string;
-  onTime: boolean;
+  assistanceStatusId: number;
+  assistanceStatusTag: string;
 };

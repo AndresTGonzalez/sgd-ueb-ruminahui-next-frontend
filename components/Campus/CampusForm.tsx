@@ -45,6 +45,8 @@ export default function CampusForm({ campusId }: { campusId: number }) {
       }
       return;
     } else {
+      //Se crea un nuevo campus
+      console.log("Creando nuevo campus");
       const createCampusData: CreateCampus = {
         name: formData.name,
         secondaryName: formData.secondaryName,
