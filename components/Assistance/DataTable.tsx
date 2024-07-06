@@ -60,12 +60,11 @@ interface DataTableProps<TData, TValue> {
   handleEdit?: (id: number) => void;
   selectRow?: (id: number) => void;
   handleView?: (id: number) => void;
-  fromDate: Date;
-  toDate: Date;
-  setFromDate: (date: Date) => void;
-  setToDate: (date: Date) => void;
   handleReport?: () => void;
   handleSync?: () => void;
+  handleFilter?: () => void;
+  setDate: (date: DateRange | undefined) => void;
+  date: DateRange | undefined;
 }
 
 export function DataTable<TData, TValue>({
@@ -75,21 +74,18 @@ export function DataTable<TData, TValue>({
   handleEdit,
   selectRow,
   handleView,
-  fromDate,
-  setFromDate,
-  toDate,
-  setToDate,
   handleReport,
   handleSync,
+  handleFilter,
+  setDate,
+  date
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
-  const [date, setDate] = React.useState<DateRange | undefined>();
-
-  const router = useRouter();
+  // const [date, setDate] = React.useState<DateRange | undefined>();
 
   const table = useReactTable({
     data,
@@ -174,6 +170,15 @@ export function DataTable<TData, TValue>({
               />
             </PopoverContent>
           </Popover>
+          <Button
+            variant={"secondary"}
+            size={"default"}
+            className="gap-2"
+            onClick={handleFilter}
+          >
+            <CalendarIcon className="h-6 w-6" />
+            Filtrar por fecha
+          </Button>
         </div>
         <div className="flex flex-row space-x-4">
           {/* <div className="flex flex-row w-fit space-x-4"></div> */}

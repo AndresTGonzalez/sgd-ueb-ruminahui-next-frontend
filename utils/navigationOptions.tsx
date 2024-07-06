@@ -9,11 +9,11 @@ import {
 } from "@heroicons/react/24/solid";
 
 export const navigationOptions: NavigationItem[] = [
-  {
-    label: "Inicio",
-    icon: <HomeIcon width={20} />,
-    href: "/dashboard",
-  },
+  // {
+  //   label: "Inicio",
+  //   icon: <HomeIcon width={20} />,
+  //   href: "/dashboard",
+  // },
   {
     label: "Asistencia",
     icon: <CalendarDaysIcon width={20} />,

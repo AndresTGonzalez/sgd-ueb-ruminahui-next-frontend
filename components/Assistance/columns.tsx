@@ -134,9 +134,9 @@ export const columns: ColumnDef<Assistance>[] = [
           variant={
             getValue() === 1
               ? "success"
-              : getValue() === 2
+              : getValue() === 2 
               ? "danger"
-              : getValue() === 3
+              : getValue() === 3 || getValue() === 5
               ? "destructive"
               : "default"
           }
@@ -146,6 +146,8 @@ export const columns: ColumnDef<Assistance>[] = [
             : getValue() === 2
             ? "Atraso"
             : getValue() === 3
+            ? "No registrada"
+            : getValue() === 5
             ? "Falta"
             : "Inconsistencia"}
         </Badge>

@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { User } from "@/models/userModel";
+import { User } from "@/models/user";
 
 export async function signIn(user: User): Promise<boolean> {
   const host: string = process.env.HOST || "http://localhost:8000";
@@ -22,7 +22,7 @@ export async function signIn(user: User): Promise<boolean> {
     cookies().set("session", data.access_token, {
       path: "/",
     });
-    redirect("/dashboard");
+    redirect("/dashboard/asistencia");
     return true;
   }
 }

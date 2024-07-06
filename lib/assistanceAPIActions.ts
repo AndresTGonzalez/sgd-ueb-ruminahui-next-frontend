@@ -3,6 +3,7 @@
 import { getSessionData } from "@/auth/getSession";
 import { assistanceEndpoint } from "./constants";
 import { Assistance } from "@/models/assistance";
+import { formatDateToEcuadorian } from "@/utils/misc";
 
 export async function getAssistance() {
   const session = await getSessionData();
@@ -12,6 +13,40 @@ export async function getAssistance() {
     },
   });
   const data = await response.json();
+
+  data.forEach((assistance: any) => {
+    assistance.date = formatDateToEcuadorian(assistance.clockCheck);
+    assistance.hour = assistance.clockCheck.split("T")[1].split(".")[0];
+    assistance.clockCheck = assistance.date + " " + assistance.hour;
+    console.log(assistance);
+  });
+
+  return data;
+}
+
+// Find justifications between two dates
+export async function getAssistanceBetweenDates(
+  fromDate: string,
+  toDate: string
+) {
+  const session = await getSessionData();
+  const response = await fetch(
+    `${assistanceEndpoint}/between-dates?startDate=${fromDate}&endDate=${toDate}`,
+    {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    }
+  );
+  const data = await response.json();
+
+  data.forEach((assistance: any) => {
+    assistance.date = formatDateToEcuadorian(assistance.clockCheck);
+    assistance.hour = assistance.clockCheck.split("T")[1].split(".")[0];
+    assistance.clockCheck = assistance.date + " " + assistance.hour;
+    console.log(assistance);
+  });
+
   return data;
 }
 
