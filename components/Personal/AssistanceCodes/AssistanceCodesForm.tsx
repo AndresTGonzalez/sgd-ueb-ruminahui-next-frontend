@@ -15,11 +15,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { PersonalScheduleSchema } from "@/models/personal";
 import { PlusIcon } from "@radix-ui/react-icons";
 import SelectFormField from "@/components/Misc/SelectFormField";
 import InputFormField from "@/components/Misc/InputFormField";
-import { daysOfTheWeekOptions } from "@/utils/constantsOptions";
 import { getAssistanceDispisitve } from "@/lib/selectOptionsAPI";
 import {
   AssistancePersonalIdentificatorSchema,

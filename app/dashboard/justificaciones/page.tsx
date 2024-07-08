@@ -4,15 +4,13 @@ import { useState, useEffect } from "react";
 
 import { useRouter } from "next/navigation";
 
-import { Campus } from "@/models/campus";
-import { deleteCampus, getCampus } from "@/lib/campusAPIActions";
-import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
 import { toast } from "sonner";
 import { DataTable } from "@/components/Justification/DataTable";
 import { columns } from "@/components/Justification/columns";
 import {
   getJustifications,
   getJustificationsBetweenDates,
+  syncJustifications,
 } from "@/lib/justificationAPIActions";
 import { Justification } from "@/models/justification";
 import { getEmployeesForSelect } from "@/lib/employeeAPIActions";
@@ -59,6 +57,18 @@ export default function Page() {
     router.push("/dashboard/justificaciones/" + id);
   };
 
+  const handleSync = async () => {
+    const response = await syncJustifications();
+    if (response === 201) {
+      toast.success("Sincronización exitosa");
+      getData().then((data) => {
+        setData(data);
+      });
+    } else {
+      toast.error("Error en la sincronización");
+    }
+  };
+
   return (
     <div className="container mx-auto py-10">
       <DataTable
@@ -69,6 +79,7 @@ export default function Page() {
         setFromDate={setFromDate}
         handleFilter={handleFilter}
         personalOptions={personalOptions}
+        handleSync={handleSync}
       />
     </div>
   );

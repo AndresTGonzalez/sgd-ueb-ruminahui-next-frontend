@@ -1,15 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { Separator } from "@/components/ui/separator";
 import { DocumentIcon } from "@heroicons/react/24/solid";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InformationSection from "@/components/Justification/InformationSection/InformationSection";
+import { get } from "http";
+import { getJustification } from "@/lib/justificationAPIActions";
+import DocumentsSection from "@/components/Justification/DocumentsSection/DocumentsSection";
 
 export default function Page({ params }: { params: { id: string } }) {
   const [tab, setTab] = useState("information");
+  const [justification, setJustification] = useState(null);
+
+  useEffect(() => {
+    const fetchJustification = async () => {
+      if (Number(params.id) === 0) return;
+      const justification = await getJustification(Number(params.id));
+      setJustification(justification);
+    };
+
+    fetchJustification();
+  }, []);
 
   const handleChangeTab = (tab: string) => {
     setTab(tab);
@@ -51,7 +65,9 @@ export default function Page({ params }: { params: { id: string } }) {
             <TabsContent value="information">
               <InformationSection personalId={Number(params.id)} />
             </TabsContent>
-            <TabsContent value="documents"></TabsContent>
+            <TabsContent value="documents">
+              <DocumentsSection id={Number(params.id)} />
+            </TabsContent>
           </Tabs>
         </div>
       </div>

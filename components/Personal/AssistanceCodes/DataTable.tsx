@@ -81,6 +81,10 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
     meta: {
+      handleDownload: (id: string) => {
+        // router.push(`/personal/assistanceCodes/${id}`);
+      },
+
       deleteData: (id: number) => {
         handleDelete && handleDelete(id);
       },

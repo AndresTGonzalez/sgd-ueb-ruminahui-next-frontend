@@ -58,6 +58,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
+import { UploadDocument } from "./UploadDocument";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -65,27 +66,21 @@ interface DataTableProps<TData, TValue> {
   handleDelete?: (id: number) => void;
   handleEdit?: (id: number) => void;
   selectRow?: (id: number) => void;
-  handleView?: (id: number) => void;
-  fromDate?: Date;
-  toDate?: Date;
-  setFromDate?: (date: Date) => void;
-  setToDate?: (date: Date) => void;
-  handleSync?: () => void;
-  handleFilter?: () => void;
-  personalOptions: any[];
+  handleDownload?: (id: string) => void;
+  // handleUpload?: () => void; as async
+  handleUpload?: () => void;
+  
+  justificationId: number;
+  setFile: (file: File) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  handleDelete,
-  handleEdit,
-  selectRow,
-  handleView,
-  setFromDate,
-  setToDate,
-  handleSync,
-  handleFilter,
+  handleDownload,
+  handleUpload,
+  justificationId,
+  setFile,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -95,29 +90,6 @@ export function DataTable<TData, TValue>({
   const [date, setDate] = React.useState<DateRange | undefined>();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState<string>("");
-
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Next.js",
-    },
-    {
-      value: "sveltekit",
-      label: "SvelteKit",
-    },
-    {
-      value: "nuxt.js",
-      label: "Nuxt.js",
-    },
-    {
-      value: "remix",
-      label: "Remix",
-    },
-    {
-      value: "astro",
-      label: "Astro",
-    },
-  ];
 
   const router = useRouter();
 
@@ -134,17 +106,20 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
     meta: {
+      handleDownload: (id: string) => {
+        handleDownload && handleDownload(id);
+      },
       deleteData: (id: number) => {
-        handleDelete && handleDelete(id);
+        // handleDelete && handleDelete(id);
       },
       viewData: (id: number) => {
-        handleView && handleView(id);
+        // handleView && handleView(id);
       },
       editData: (id: number) => {
-        handleEdit && handleEdit(id);
+        // handleEdit && handleEdit(id);
       },
       selectRow: (id: number) => {
-        selectRow && selectRow(id);
+        // selectRow && selectRow(id);
       },
     },
   });
@@ -152,62 +127,11 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex flex-row items-center justify-between py-4">
-        <div className="flex flex-row space-x-4">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                id="date"
-                variant={"outline"}
-                className={cn(
-                  "w-[300px] justify-start text-left font-normal",
-                  !date && "text-muted-foreground"
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date?.from ? (
-                  date.to ? (
-                    <>
-                      {format(date.from, "LLL dd, y")} -{" "}
-                      {format(date.to, "LLL dd, y")}
-                    </>
-                  ) : (
-                    format(date.from, "LLL dd, y")
-                  )
-                ) : (
-                  <span>Rango de fechas...</span>
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                locale={es}
-                initialFocus
-                mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={1}
-              />
-            </PopoverContent>
-          </Popover>
-          <Button
-            variant={"secondary"}
-            onClick={() => {
-              setFromDate && setFromDate(date?.from || new Date());
-              setToDate && setToDate(date?.to || new Date());
-              handleFilter && handleFilter();
-            }}
-          >
-            Filtrar
-          </Button>
-        </div>
-        <div className="flex flex-row space-x-4">
-          {/* <div className="flex flex-row w-fit space-x-4"></div> */}
-          {/* Actualizar Button */}
-          <Button variant={"secondary"} size={"icon"} onClick={handleSync}>
-            <RefreshCw className="h-6 w-6" />
-          </Button>
-        </div>
+        <UploadDocument
+          justificationId={justificationId}
+          handleUpload={handleUpload!}
+          setFile={setFile}
+        />
       </div>
       <div className="rounded-md border">
         <Table>
