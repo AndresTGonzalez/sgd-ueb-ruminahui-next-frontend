@@ -30,6 +30,7 @@ export interface PersonalData {
   cityId: number;
   city?: City;
   provinceId?: number;
+  PersonalPhoto?: PersonalPhoto;
 }
 
 export const PersonalDataSchema = z.object({
@@ -151,4 +152,40 @@ export const PersonalCertificationsSchema = z.object({
   certification: z.string().min(3, "Ingrese un certificado válido"),
   institution: z.string().min(3, "Ingrese una institución válida"),
   completitionYear: z.number().int().min(1900, "Ingrese un año válido"),
+});
+
+export interface PersonalDocument {
+  id?: number;
+  personalId: number;
+  documentRoute: string;
+  documentName: string;
+}
+
+// "personalId": 37,
+// "photoRoute": "public\\personal-photos\\IMG_20210511_151821_2__172054325859837.jpg",
+// "photoName": "IMG_20210511_151821_2__172054325859837.jpg"
+
+export interface PersonalPhoto {
+  id?: number;
+  personalId: number;
+  photoRoute: string;
+  photoName: string;
+}
+
+export interface PersonalChildrens {
+  id?: number;
+  personalId: number;
+  Personal?: PersonalData;
+  names: string;
+  lastNames: string;
+  birthdate: Date;
+  genderId: number;
+}
+
+export const PersonalChildrensSchema = z.object({
+  // id: z.number().int().optional(),
+  names: z.string().min(3, "Ingrese un nombre válido"),
+  lastNames: z.string().min(3, "Ingrese un apellido válido"),
+  birthdate: z.date(),
+  genderId: z.number().int().min(1, "Seleccione un género"),
 });

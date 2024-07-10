@@ -111,14 +111,6 @@ export const columns: ColumnDef<Assistance>[] = [
   {
     accessorKey: "clockCheck",
     header: "Registro de reloj",
-  //   cell: ({ getValue }) => {
-  //     // Formatear la fecha en DD:MM:YYYY HH:MM:SS
-  //     const value = getValue() as string | number | Date;
-  //     const date = new Date(value);
-
-  //     return date.toLocaleString();
-  //   },
-  // },
   },
   {
     accessorKey: "assistanceStatusId",
@@ -132,7 +124,7 @@ export const columns: ColumnDef<Assistance>[] = [
         // Si es 1, es a tiempo, si es 2, es atraso, 3 es falta y 4 es inconsistencia
         <Badge
           variant={
-            getValue() === 1
+            getValue() === 1 || getValue() === 6
               ? "success"
               : getValue() === 2 
               ? "danger"
@@ -148,7 +140,9 @@ export const columns: ColumnDef<Assistance>[] = [
             : getValue() === 3
             ? "No registrada"
             : getValue() === 5
-            ? "Falta"
+            ? "Justificada"
+            : getValue() === 6
+            ? "Justificada"
             : "Inconsistencia"}
         </Badge>
       );

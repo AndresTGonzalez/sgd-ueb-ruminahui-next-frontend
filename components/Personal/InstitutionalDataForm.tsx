@@ -34,7 +34,9 @@ import { toast } from "sonner";
 import {
   createInstitutionalPersonalData,
   getInstitutionalPersonalData,
+  getPersonalCampus,
   updateInstitutionalPersonalData,
+  updatePersonalCampus,
 } from "@/lib/institutionalPersonalDataAPIAction";
 import MultipleSelectorField from "../Misc/MultipleSelectorField";
 import CheckBoxMultiSelectField from "../Misc/CheckBoxMultiSelectField";
@@ -44,21 +46,6 @@ export default function InstitutionalDataForm({
 }: {
   personalId: number;
 }) {
-  // todo: Eliminar luego de probar
-  const OPTIONS: Option[] = [
-    { label: "nextjs", value: "nextjs" },
-    { label: "React", value: "react" },
-    { label: "Remix", value: "remix" },
-    { label: "Vite", value: "vite" },
-    { label: "Nuxt", value: "nuxt" },
-    { label: "Vue", value: "vue" },
-    { label: "Svelte", value: "svelte" },
-    { label: "Angular", value: "angular" },
-    { label: "Ember", value: "ember", disable: true },
-    { label: "Gatsby", value: "gatsby", disable: true },
-    { label: "Astro", value: "astro" },
-  ];
-
   const [isEdit, setIsEdit] = useState(false);
   const [institutionalData, setInstitutionalData] =
     useState<InstitutionalPersonalData | null>(null);
@@ -70,6 +57,8 @@ export default function InstitutionalDataForm({
   const [initialCategory, setInitialCategory] = useState();
   const [initialJournal, setInitialJournal] = useState();
 
+  const [campus, setCampus] = useState<number[]>([]);
+
   const router = useRouter();
 
   const form = useForm<z.infer<typeof InstitutionalPersonalDataSchema>>({
@@ -80,9 +69,19 @@ export default function InstitutionalDataForm({
     const fetchInstitutionalData = async () => {
       if (personalId === 0) return;
       const institutionalData = await getInstitutionalPersonalData(personalId);
+      const campusData = await getPersonalCampus(personalId);
+
+      if (campusData) {
+        setCampus(campusData);
+      }
+
       const data = institutionalData[0];
+
+      // setCampus([2]);
+
       if (data) {
         form.reset(data);
+        setIsEdit(true);
         // form.setValue("campus", [1]);
         setInstitutionalData(data);
         setIsEdit(true);
@@ -97,6 +96,17 @@ export default function InstitutionalDataForm({
     fetchInstitutionalData();
   }, []);
 
+  const submitInstitutionalData = async (data: InstitutionalPersonalData) => {
+    const response = await createInstitutionalPersonalData(data);
+    return response;
+  };
+
+  const submitCampusPersonalData = async (data: number[]) => {
+    // const response = await (personalId, data);
+    const response = await updatePersonalCampus(personalId, data);
+    return response;
+  };
+
   const onSubmit = async (
     formData: z.infer<typeof InstitutionalPersonalDataSchema>
   ) => {
@@ -109,24 +119,24 @@ export default function InstitutionalDataForm({
       journalId: formData.journalId,
     };
 
-    console.log(formData.campus);
-    // if (!isEdit) {
-    //   const response = await createInstitutionalPersonalData(newData);
-    //   if (response === 201) {
-    //     toast.success("Datos institucionales registrados exitosamente");
-    //   } else {
-    //     toast.error("Error al registrar los datos institucionales");
-    //   }
-    // } else {
-    //   // newData.id = Number(form.getValues("id"));
-    //   newData.id = institutionalData?.id as number;
-    //   const response = await updateInstitutionalPersonalData(newData);
-    //   if (response === 200) {
-    //     toast.success("Datos institucionales actualizados exitosamente");
-    //   } else {
-    //     toast.error("Error al actualizar los datos institucionales");
-    //   }
-    // }
+    formData.campus = campus;
+    // Primero hacer la peticion para crear los institutional
+    const responseInstitutionalData = await submitInstitutionalData(newData);
+
+    if (responseInstitutionalData === 201) {
+      toast.success("Datos institucionales guardados con éxito");
+      const responseCampusData = await submitCampusPersonalData(campus);
+      if (responseCampusData === 201) {
+        toast.success("Sedes institucionales guardadas con éxito");
+      } else {
+        toast.error("Error al guardar las sedes institucionales");
+        return;
+      }
+    } else {
+      toast.error("Error al guardar los datos institucionales");
+    }
+
+    // Luego hacer la peticion para crear los campus
   };
 
   return (
@@ -194,7 +204,8 @@ export default function InstitutionalDataForm({
                 formLabel="Sedes institucionales"
                 placeholder="Campus"
                 fetchItems={getCampus}
-                defaultValue={[1]}
+                defaultValue={campus}
+                handleChange={setCampus}
               />
             </div>
             <div className="w-full flex flex-row justify-end">

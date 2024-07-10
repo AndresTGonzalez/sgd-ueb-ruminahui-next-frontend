@@ -91,3 +91,51 @@ export async function getJustificationFiles(justificationId: number) {
   return data;
 }
 
+// Eliminar documento
+export async function deleteJustificationFile(id: number) {
+  const session = await getSessionData();
+  const response = await fetch(`${justificationFilesEndpoint}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  return response.status;
+}
+
+// Obtener los estados de las justificaciones
+export async function getJustificationStatus() {
+  const session = await getSessionData();
+  const response = await fetch(`${justificationEndpoint}/status`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}
+
+// Cambiar el estado de una justificacion
+export async function changeJustificationStatus(
+  justificationId: number,
+  statusId: number
+) {
+  console.log(justificationId, statusId);
+  const session = await getSessionData();
+  const response = await fetch(
+    `${justificationEndpoint}/${justificationId}/status`,
+    {
+      headers: {
+        Authorization: `Bearer ${session}`,
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify({
+        statusId: statusId,
+      }),
+    }
+  );
+  const data = await response.json();
+  console.log(data);
+  return response.status;
+}

@@ -8,6 +8,8 @@ import MedicalDataForm from "./MedicalDataForm";
 import InstitutionalDataForm from "./InstitutionalDataForm";
 import AssistanceSection from "./AssistanceSection";
 import CVTabs from "./CV/CVTabs";
+import DocumentsForm from "./Documents/DocumentsForm";
+import Childrens from "./Childrens/Childrens";
 
 export default function TabsForm({ personalId }: { personalId: number }) {
   const [tab, setTab] = useState("personalData");
@@ -26,6 +28,14 @@ export default function TabsForm({ personalId }: { personalId: number }) {
           }}
         >
           Datos personales
+        </TabsTrigger>
+        <TabsTrigger
+          value="childrens"
+          onClick={() => {
+            handleChangeTab("childrens");
+          }}
+        >
+          Hijos
         </TabsTrigger>
         <TabsTrigger
           value="medicalData"
@@ -59,9 +69,20 @@ export default function TabsForm({ personalId }: { personalId: number }) {
         >
           Hoja de vida
         </TabsTrigger>
+        <TabsTrigger
+          value="documents"
+          onClick={() => {
+            handleChangeTab("documents");
+          }}
+        >
+          Documentos
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="personalData">
         <PersonalDataForm personalId={Number(personalId)} />
+      </TabsContent>
+      <TabsContent value="childrens">
+        <Childrens personalId={personalId} />
       </TabsContent>
       <TabsContent value="medicalData">
         {/* <PersonalDataForm /> */}
@@ -78,6 +99,10 @@ export default function TabsForm({ personalId }: { personalId: number }) {
       <TabsContent value="cv">
         {/* <p>CV data</p> */}
         <CVTabs personalId={personalId} />
+      </TabsContent>
+      <TabsContent value="documents">
+        {/* <p>CV data</p> */}
+        <DocumentsForm id={personalId} />
       </TabsContent>
     </Tabs>
   );

@@ -11,3 +11,7 @@ export const titlesEndpoint = `${host}/api/title`;
 export const certificationsEndpoint = `${host}/api/certification`;
 export const justificationEndpoint = `${host}/api/justification`;
 export const justificationFilesEndpoint = `${host}/api/justification-file`;
+export const personalDocumentsEndpoint = `${host}/api/personal-documents`;
+export const personalPhotoEndpoint = `${host}/api/personal-photo`;
+export const personalChildrenEndpoint = `${host}/api/personal-children`;
+export const personalCampusEndpoint = `${host}/api/campus-personal`;

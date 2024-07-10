@@ -1,35 +1,31 @@
 "use client";
 
-import {
-  deleteJustificationFile,
-  getJustificationFiles,
-} from "@/lib/justificationAPIActions";
-import { JustificationFile } from "@/models/justification";
 import { useState, useEffect } from "react";
 import { DataTable } from "./DataTable";
+import { host, personalDocumentsEndpoint } from "@/lib/constants";
+import { deletePersonalDocument, getPersonalDocuments } from "@/lib/employeeAPIActions";
+import { PersonalDocument } from "@/models/personal";
 import { columns } from "./columns";
-import { host, justificationFilesEndpoint } from "@/lib/constants";
 import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
 import { toast } from "sonner";
 
-async function getData(justificationId: number): Promise<JustificationFile[]> {
-  return await getJustificationFiles(justificationId);
+async function getData(personalId: number): Promise<PersonalDocument[]> {
+  return await getPersonalDocuments(personalId);
 }
 
-export default function DocumentsSection({ id }: { id: number }) {
-  const [data, setData] = useState<JustificationFile[]>([]);
+export default function DocumentsForm({ id }: { id: number }) {
+  const [data, setData] = useState<PersonalDocument[]>([]);
   // Archivo
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<number | null>(null);
 
   const handleView = async (id: number) => {
-    console.log("Se ejecuta el handleView con id: ", id);
+    console.log("Se ejecuta");
     // Obtengo la ruita del archivo
-    const response = await fetch(`${justificationFilesEndpoint}/file/${id}`);
+    const response = await fetch(`${personalDocumentsEndpoint}/file/${id}`);
     const data = await response.json();
-    console.log(response);
     if (response.ok) {
       const url = `${host}${data.documentRoute}`;
       window.open(url, "_blank");
@@ -38,7 +34,7 @@ export default function DocumentsSection({ id }: { id: number }) {
     }
   };
 
-  const handleUpload = async () => {
+  const handleUploadSingle = async (file: File) => {
     console.log(file);
 
     if (!file) {
@@ -49,15 +45,16 @@ export default function DocumentsSection({ id }: { id: number }) {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(`${justificationFilesEndpoint}/${id}`, {
+    const response = await fetch(`${personalDocumentsEndpoint}/${id}`, {
       method: "POST",
       body: formData,
     });
 
     if (response.ok) {
       const newFile = await response.json();
-      setData([...data, newFile]);
-      setFile(null);
+      // setData([...data, newFile]);
+      const actualData = data;
+      setData(data.concat(newFile));
       setError(null);
     } else {
       setError("Error al subir el archivo");
@@ -65,13 +62,18 @@ export default function DocumentsSection({ id }: { id: number }) {
     }
   };
 
-  const selectRow = (id: number) => {
-    setSelectedRow(id);
-    setOpen(true);
+  const handleUpload = async () => {
+    files.forEach((file) => {
+      handleUploadSingle(file);
+    });
+  };
+
+  const setFilesFromChild = (files: File[]) => {
+    setFiles(files);
   };
 
   const handleDelete = async (id: number) => {
-    const response = await deleteJustificationFile(selectedRow!);
+    const response = await deletePersonalDocument(selectedRow!);
     if (response === 200) {
       setData(data.filter((campus) => campus.id !== id));
       toast.success("Documento eliminado correctamente");
@@ -82,6 +84,11 @@ export default function DocumentsSection({ id }: { id: number }) {
     getData(id).then((data) => {
       setData(data);
     });
+  };
+
+  const selectRow = (id: number) => {
+    setSelectedRow(id);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -96,10 +103,11 @@ export default function DocumentsSection({ id }: { id: number }) {
         data={data}
         columns={columns}
         handleViewFile={handleView}
-        justificationId={id}
+        handleDelete={handleDelete}
         handleUpload={handleUpload}
-        setFile={setFile}
+        setFilesFromChild={setFilesFromChild}
         selectRow={selectRow}
+        personalId={id}
       />
       <DeleteAlertDialog
         open={open}

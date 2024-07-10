@@ -58,8 +58,8 @@ const ActionColumn: Partial<ColumnDef<PersonalData>> = {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={handleView}>Visualizar</DropdownMenuItem>
-            <DropdownMenuItem onClick={handleEdit}>Modificar</DropdownMenuItem>
+            {/* <DropdownMenuItem onClick={handleView}>Visualizar</DropdownMenuItem> */}
+            <DropdownMenuItem onClick={handleEdit}>Visualizar</DropdownMenuItem>
             <DropdownMenuItem onClick={selectRow}>Eliminar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

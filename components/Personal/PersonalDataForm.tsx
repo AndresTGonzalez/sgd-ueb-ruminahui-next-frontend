@@ -26,6 +26,8 @@ import { createEmployee, getEmployee } from "@/lib/employeeAPIActions";
 import { City, SelectorOption } from "@/models/selectorOption";
 import { PersonalData, PersonalDataSchema } from "@/models/personal";
 import { toast } from "sonner";
+import { host, personalPhotoEndpoint } from "@/lib/constants";
+import { Input } from "../ui/input";
 
 export default function PersonalDataForm({
   personalId,
@@ -35,6 +37,9 @@ export default function PersonalDataForm({
   const router = useRouter();
 
   const [cities, setCities] = useState<City[]>([]);
+
+  const [photo, setPhoto] = useState<string>("/defaultProfile.png");
+  const [file, setFile] = useState<File | null>(null);
 
   // const [provinceId, setProvinceId] = useState<number>();
   const [initialProvinceId, setInitialProvinceId] = useState<number>();
@@ -54,12 +59,61 @@ export default function PersonalDataForm({
     });
   };
 
+  const addUrlToPhotoName = (photoName: string) => {
+    return host + "/personal-photos/" + photoName;
+  };
+
+  const handleUpload = async () => {
+    console.log(file);
+
+    if (!file) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(`${personalPhotoEndpoint}/${personalId}`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (response.ok) {
+      const newFile = await response.json();
+
+      const urlPhoto = addUrlToPhotoName(newFile.photoName);
+      setPhoto(urlPhoto);
+
+      toast.success("Foto subida exitosamente");
+
+      // setData([...data, newFile]);
+      setFile(null);
+      // setError(null);
+    } else {
+      // setError("Error al subir el archivo");
+      toast.error("Error al subir la foto");
+      console.error(response);
+    }
+  };
+
   useEffect(() => {
     const fetchEmployee = async () => {
       if (personalId === 0) return;
       const employee = await getEmployee(personalId);
       const data = employee;
-      // Setear la propiedad del formulario provinceId
+
+      console.log(data);
+
+      // const urlPhoto =
+      //   host + "/personal-photos/" + data.PersonalPhoto.photoName;
+
+      // agregar veruficacion de la foto
+      if (data.PersonalPhoto) {
+        const urlPhoto =
+          host + "/personal-photos/" + data.PersonalPhoto.photoName;
+        setPhoto(urlPhoto);
+      }
+
       if (data.statusCode !== 400) {
         form.reset(data);
         setInitialProvinceId(data.City.provinceId);
@@ -97,10 +151,39 @@ export default function PersonalDataForm({
 
   return (
     <div className="w-full h-full flex flex-col px-8">
+      <div className="flex flex-col gap-3">
+        <h3 className="text-lg font-light">Datos personales:</h3>
+        {/* Mostrar si es diferente de  0*/}
+        {personalId !== 0 && (
+          <div className="flex flex-row w-fit gap-4 items-center">
+            <div className="w-full h-full flex justify-center items-center">
+              <img
+                className="w-56 h-56 object-cover rounded-lg"
+                src={photo}
+                alt="Foto de perfil"
+              />
+            </div>
+            <div className=" flex flex-col gap-3 w-fit">
+              <Input
+                type="file"
+                onChange={(e) => setFile(e.target.files![0])}
+              />
+              <Button
+                variant="success"
+                onClick={async () => {
+                  await handleUpload();
+                }}
+              >
+                Subir foto
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="py-7 w-full grid grid-cols-1 gap-5">
-            <h3 className="text-lg font-light">Datos personales:</h3>
+            {/* Imagen */}
             <div className="w-full grid grid-cols-2 gap-20">
               {/* Cedula */}
               <InputFormField

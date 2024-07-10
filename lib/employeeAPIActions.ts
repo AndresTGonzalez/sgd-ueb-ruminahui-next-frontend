@@ -2,7 +2,12 @@
 
 import { getSessionData } from "@/auth/getSession";
 import { PersonalData } from "@/models/personal";
-import { personalEndpoint } from "./constants";
+import {
+  personalCampusEndpoint,
+  personalChildrenEndpoint,
+  personalDocumentsEndpoint,
+  personalEndpoint,
+} from "./constants";
 
 export async function getEmployees() {
   const session = await getSessionData();
@@ -81,3 +86,67 @@ export async function deleteEmployee(id: number) {
   console.log(data);
   return response.status;
 }
+
+// Get personalDocuments
+export async function getPersonalDocuments(personalId: number) {
+  const session = await getSessionData();
+  const response = await fetch(`${personalDocumentsEndpoint}/${personalId}`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}
+
+// Eliminar documento personal
+export async function deletePersonalDocument(id: number) {
+  const session = await getSessionData();
+  const response = await fetch(`${personalDocumentsEndpoint}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  return response.status;
+}
+
+// Obtener hijos del empleado en base al id del empleado
+export async function getPersonalChildrens(id: number) {
+  const session = await getSessionData();
+  const response = await fetch(`${personalChildrenEndpoint}/personal/${id}`, {
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  const data = await response.json();
+  return data;
+}
+
+// Crear un nuevo hijo
+export async function createPersonalChildren(children: any) {
+  const session = await getSessionData();
+  const response = await fetch(personalChildrenEndpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session}`,
+    },
+    body: JSON.stringify(children),
+  });
+  const data = await response.json();
+  return data;
+}
+
+// Eliminar hijo
+export async function deletePersonalChildren(id: number) {
+  const session = await getSessionData();
+  const response = await fetch(`${personalChildrenEndpoint}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${session}`,
+    },
+  });
+  return response.status;
+}
+

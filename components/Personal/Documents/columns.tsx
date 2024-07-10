@@ -4,32 +4,33 @@ import { ColumnDef, RowData } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
 
-import { JustificationFile } from "@/models/justification";
-import { DownloadIcon, TrashIcon } from "lucide-react";
+import { DeleteIcon, DownloadIcon, TrashIcon } from "lucide-react";
+import { PersonalDocument } from "@/models/personal";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
-    handleDownload: (id: string) => void;
-    selectRow: (id: number) => void;
+    handleDelete: (id: number) => void;
     handleViewFile: (id: number) => void;
+    selectRow: (id: number) => void;
   }
 }
 
-const ActionColumn: Partial<ColumnDef<JustificationFile>> = {
+const ActionColumn: Partial<ColumnDef<PersonalDocument>> = {
   cell: ({ getValue, row: { index }, column: { id }, table }) => {
     const initialValue = getValue() as number;
 
-    const handleDownload = () => {
-      // table.options.meta?.handleDownload(initialValue);
-    };
+    const handleDelete = () => {
+      table.options.meta?.handleDelete(initialValue);
+    }
+
+    const handleViewFile = () => {
+      console.log("Se ejecuta con id: ", initialValue);
+      table.options.meta?.handleViewFile(initialValue);
+    }
 
     const selectRow = () => {
       table.options.meta?.selectRow(initialValue);
-    };
-
-    const handleViewFile = () => {
-      table.options.meta?.handleViewFile(initialValue);
-    };
+    }
 
     return (
       <>
@@ -46,7 +47,7 @@ const ActionColumn: Partial<ColumnDef<JustificationFile>> = {
   },
 };
 
-export const columns: ColumnDef<JustificationFile>[] = [
+export const columns: ColumnDef<PersonalDocument>[] = [
   {
     accessorKey: "documentName",
     header: "Nombre del archivo",

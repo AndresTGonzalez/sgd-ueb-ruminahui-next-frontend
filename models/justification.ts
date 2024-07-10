@@ -25,3 +25,8 @@ export type JustificationFile = {
   justificationId: number;
   documentRoute: string;
 };
+
+export type JustificationStatus = {
+  id: number;
+  name: string;
+};
