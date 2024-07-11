@@ -8,6 +8,7 @@ import {
   personalDocumentsEndpoint,
   personalEndpoint,
 } from "./constants";
+import { SelectorOption } from "@/models/selectorOption";
 
 export async function getEmployees() {
   const session = await getSessionData();
@@ -20,7 +21,7 @@ export async function getEmployees() {
   return data;
 }
 
-export async function getEmployeesForSelect() {
+export async function getEmployeesForSelect(): Promise<SelectorOption[]> {
   const session = await getSessionData();
   const response = await fetch(personalEndpoint, {
     headers: {
@@ -28,10 +29,14 @@ export async function getEmployeesForSelect() {
     },
   });
   const data = await response.json();
-  return data.map((employee: PersonalData) => ({
-    value: employee.id,
-    label: `${employee.names} ${employee.lastNames}`,
+  const forReturn = data.map((employee: PersonalData) => ({
+    id: employee.id,
+    name: `${employee.names} ${employee.lastNames}`,
   }));
+
+  console.log(forReturn);
+
+  return forReturn;
 }
 
 export async function getEmployee(id: number) {
@@ -149,4 +154,3 @@ export async function deletePersonalChildren(id: number) {
   });
   return response.status;
 }
-

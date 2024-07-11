@@ -65,6 +65,7 @@ interface DataTableProps<TData, TValue> {
   handleFilter?: () => void;
   setDate: (date: DateRange | undefined) => void;
   date: DateRange | undefined;
+  handleAssistanceForm?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -78,7 +79,8 @@ export function DataTable<TData, TValue>({
   handleSync,
   handleFilter,
   setDate,
-  date
+  date,
+  handleAssistanceForm,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -111,6 +113,15 @@ export function DataTable<TData, TValue>({
       },
       selectRow: (id: number) => {
         selectRow && selectRow(id);
+      },
+      handleDelete: (id: number) => {
+        // handleDelete && handleDelete(id);
+      },
+      handleDownload: (id: string) => {
+        // handleDownload && handleDownload(id);
+      },
+      handleViewFile: (id: number) => {
+        // handleViewFile && handleViewFile(id);
       },
     },
   });
@@ -193,7 +204,9 @@ export function DataTable<TData, TValue>({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Agregar asistencia manual</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleAssistanceForm}>
+                Agregar asistencia manual
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleReport}>
                 Generar reporte en Excel
               </DropdownMenuItem>

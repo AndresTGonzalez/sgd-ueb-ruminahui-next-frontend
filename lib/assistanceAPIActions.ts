@@ -2,7 +2,7 @@
 
 import { getSessionData } from "@/auth/getSession";
 import { assistanceEndpoint } from "./constants";
-import { Assistance } from "@/models/assistance";
+import { Assistance, ManualAssistance } from "@/models/assistance";
 import { formatDateToEcuadorian } from "@/utils/misc";
 
 export async function getAssistance() {
@@ -84,4 +84,19 @@ export async function syncAssistance() {
     },
   });
   return response.status;
+}
+
+export async function createAssistance(assistance: ManualAssistance) {
+  const session = await getSessionData();
+  const response = await fetch(assistanceEndpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session}`,
+    },
+    body: JSON.stringify(assistance),
+  });
+  const data = await response.json();
+  console.log(data);
+  return { data, status: response.status };
 }

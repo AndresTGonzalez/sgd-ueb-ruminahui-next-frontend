@@ -7,20 +7,17 @@ import { columns } from "@/components/Assistance/columns";
 import {
   syncAssistance,
   getAssistanceBetweenDates,
+  createAssistance,
 } from "@/lib/assistanceAPIActions";
-import { Assistance } from "@/models/assistance";
+import { Assistance, ManualAssistance } from "@/models/assistance";
 import { toast } from "sonner";
 import { DateRange } from "react-day-picker";
-
-// async function getData(): Promise<Assistance[]> {
-//   return await getAssistance();
-// }
+import { AssistanceForm } from "@/components/Assistance/AssistanceForm";
 
 export default function Page() {
   const [data, setData] = useState<Assistance[]>([]);
-  const [fromDate, setFromDate] = useState<Date | undefined>();
-  const [toDate, setToDate] = useState<Date | undefined>();
   const [date, setDate] = useState<DateRange | undefined>();
+  const [open, setOpen] = useState(false);
 
   const getAssistances = async () => {
     const { firstDay, lastDay } = getDefaultDates();
@@ -100,6 +97,18 @@ export default function Page() {
     }
   };
 
+  const handleNew = async (assistance: ManualAssistance) => {
+    const response = await createAssistance(assistance);
+    if (response.status === 201) {
+      toast.success("Asistencia creada correctamente");
+      getAssistances().then((data) => {
+        setData(data);
+      });
+    } else {
+      toast.error("Error al crear la asistencia");
+    }
+  };
+
   return (
     <>
       <div className="container mx-auto py-10">
@@ -111,8 +120,10 @@ export default function Page() {
           handleFilter={handleFilter}
           setDate={setDate}
           date={date}
+          handleAssistanceForm={() => setOpen(true)}
         />
       </div>
+      <AssistanceForm open={open} setOpen={setOpen} handleNew={handleNew} />
     </>
   );
 }
