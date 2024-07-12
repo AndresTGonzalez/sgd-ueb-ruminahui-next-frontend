@@ -154,3 +154,20 @@ export async function deletePersonalChildren(id: number) {
   });
   return response.status;
 }
+
+// Cambiar el estado
+export async function changeStatus(id: number, status: boolean) {
+  const session = await getSessionData();
+  const response = await fetch(`${personalEndpoint}/change-status/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${session}`,
+      "Content-Type": "application/json", // Aquí se corrige contentType por Content-Type
+    },
+    body: JSON.stringify({
+      status: status,
+    }),
+  });
+  console.log(response);
+  return response.status;
+}

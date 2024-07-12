@@ -52,6 +52,13 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { Label } from "../ui/label";
+import { Switch } from "../ui/switch";
+import {
+  changeNoPresencialAssistanceStatus,
+  getNoPresencialAssistanceStatus,
+} from "@/lib/assistanceAPIActions";
+import { toast } from "sonner";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -126,6 +133,29 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const [checked, setChecked] = React.useState(false);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      getNoPresencialAssistanceStatus().then((response) => {
+        setChecked(response[0].assistance_activate);
+      });
+    };
+    fetchData();
+  }, []);
+
+  const handleChecked = async (value: boolean) => {
+    setChecked(value);
+    const response = await changeNoPresencialAssistanceStatus(value);
+    if (response === 201) {
+      toast.success("Asistencia no presencial actualizada correctamente");
+    } else {
+      toast.error(
+        "Error al actualizar el estado de la asistencia no presencial"
+      );
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-row items-center justify-between py-4">
@@ -192,8 +222,10 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
         <div className="flex flex-row space-x-4">
-          {/* <div className="flex flex-row w-fit space-x-4"></div> */}
-          {/* Actualizar Button */}
+          <div className="flex items-center space-x-2">
+            <Label htmlFor="airplane-mode">Asistencia no presencial: </Label>
+            <Switch checked={checked} onCheckedChange={handleChecked} />
+          </div>
           <Button variant={"secondary"} size={"icon"} onClick={handleSync}>
             <RefreshCw className="h-6 w-6" />
           </Button>

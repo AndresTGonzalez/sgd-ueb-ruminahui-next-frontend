@@ -50,6 +50,17 @@ export default function Page() {
     router.push("/dashboard/personal/visualizar/" + id);
   };
 
+  const handleReport = () => {
+    const url = "http://localhost:8000/api/personal/generate-excel-report";
+
+    // Crear un enlace y simular el clic para descargar el archivo
+    const link = document.createElement("a");
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <div className="container mx-auto py-10">
@@ -59,6 +70,7 @@ export default function Page() {
           selectRow={selectRow}
           handleEdit={handleEdit}
           handleView={handleView}
+          handleReport={handleReport}
         />
       </div>
       <DeleteAlertDialog

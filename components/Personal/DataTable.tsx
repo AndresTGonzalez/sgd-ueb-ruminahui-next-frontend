@@ -27,6 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { PlusIcon } from "@heroicons/react/24/solid";
+import { DownloadIcon } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -35,6 +36,7 @@ interface DataTableProps<TData, TValue> {
   handleEdit?: (id: number) => void;
   selectRow?: (id: number) => void;
   handleView?: (id: number) => void;
+  handleReport?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -44,6 +46,7 @@ export function DataTable<TData, TValue>({
   handleEdit,
   selectRow,
   handleView,
+  handleReport,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -76,6 +79,15 @@ export function DataTable<TData, TValue>({
       selectRow: (id: number) => {
         selectRow && selectRow(id);
       },
+      handleDelete: (id: number) => {
+        // handleDelete && handleDelete(id);
+      },
+      handleDownload: (id: string) => {
+        // handleDownload && handleDownload(id);
+      },
+      handleViewFile: (id: number) => {
+        // handleViewFile && handleViewFile(id);
+      },
     },
   });
 
@@ -94,14 +106,24 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Button
-          className="w-36 flex flex-row items-center justify-between"
-          variant={"success"}
-          onClick={handleNew}
-        >
-          Nuevo empleado
-          <PlusIcon className="h-5 w-5" />
-        </Button>
+        <div className="flex flex-row gap-3">
+          <Button
+            className="w-36 flex flex-row items-center justify-between"
+            variant={"success"}
+            onClick={handleNew}
+          >
+            Nuevo empleado
+            <PlusIcon className="h-5 w-5" />
+          </Button>
+          <Button
+            className="flex flex-row items-center justify-center"
+            variant={"secondary"}
+            size={"icon"}
+            onClick={handleReport}
+          >
+            <DownloadIcon className="h-5 w-5" />
+          </Button>
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

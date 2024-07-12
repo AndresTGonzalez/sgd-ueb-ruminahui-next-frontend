@@ -100,3 +100,33 @@ export async function createAssistance(assistance: ManualAssistance) {
   console.log(data);
   return { data, status: response.status };
 }
+
+export async function changeNoPresencialAssistanceStatus(status: boolean) {
+  const session = await getSessionData();
+  const response = await fetch(`${assistanceEndpoint}/enable-no-presencial`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${session}`,
+      "Content-Type": "application/json", // Aquí se corrige contentType por Content-Type
+    },
+    body: JSON.stringify({
+      enable: status,
+    }),
+  });
+  return response.status;
+}
+
+// Obtener el estado de la asistencia no presencial
+export async function getNoPresencialAssistanceStatus() {
+  const session = await getSessionData();
+  const response = await fetch(
+    `${assistanceEndpoint}/assistance-no-presencial`,
+    {
+      headers: {
+        Authorization: `Bearer ${session}`,
+      },
+    }
+  );
+  const data = await response.json();
+  return data;
+}

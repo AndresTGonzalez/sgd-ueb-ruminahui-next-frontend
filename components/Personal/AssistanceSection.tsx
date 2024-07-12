@@ -14,7 +14,6 @@ import { columns as SchedulesColumns } from "./Schedules/columns";
 import {
   createAssistancePersonalIdentificator,
   deleteAssistancePersonalIdentificator,
-  getAssistancePersonalIdentificator,
   getAssistancePersonalIdentificatorByPersonalId,
 } from "@/lib/assistancePersonalIdentificatorAPIActions";
 import { toast } from "sonner";
@@ -25,6 +24,7 @@ import {
   deletePersonalSchedule,
   getPersonalSchedules,
 } from "@/lib/personalSchedulesAPIActions";
+import { changeStatus, getEmployee } from "@/lib/employeeAPIActions";
 
 async function getAssistanceIdentificator(
   personalId: number
@@ -32,7 +32,10 @@ async function getAssistanceIdentificator(
   return await getAssistancePersonalIdentificatorByPersonalId(personalId);
 }
 
-// Agregar para horarios
+async function getStatus(personalId: number): Promise<boolean> {
+  const response = await getEmployee(personalId);
+  return response.isActived;
+}
 
 export default function AssistanceSection({
   personalId,
@@ -48,19 +51,35 @@ export default function AssistanceSection({
 
   const [openCodeDelete, setOpenCodeDelete] = useState(false);
   const [openScheduleDelete, setOpenScheduleDelete] = useState(false);
-  // const [id, setId] = useState(0);
 
   const [scheduleId, setScheduleId] = useState(0);
   const [codeId, setCodeId] = useState(0);
 
+  const [isActived, setIsActived] = useState<boolean>(true);
+
   useEffect(() => {
-    getAssistanceIdentificator(Number(personalId)).then((data) => {
-      setAssistanceIdentificator(data);
-    });
-    getPersonalSchedules(personalId).then((data) => {
-      setPersonalSchedules(data);
-    });
-  }, []);
+    async function fetchData() {
+      try {
+        const [assistanceData, schedulesData, status] = await Promise.all([
+          getAssistanceIdentificator(Number(personalId)),
+          getPersonalSchedules(personalId),
+          getStatus(personalId),
+        ]);
+        setAssistanceIdentificator(assistanceData);
+        setPersonalSchedules(schedulesData);
+        setIsActived(status);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData();
+  }, [personalId]);
+
+  useEffect(() => {
+    console.log("isActived changed:", isActived);
+    setIsActived(isActived);
+    console.log("isActived:", isActived);
+  }, [isActived]);
 
   const selectRowCode = (id: number) => {
     setCodeId(id);
@@ -134,6 +153,15 @@ export default function AssistanceSection({
     }
   };
 
+  const handleChangeStatus = async (value: boolean) => {
+    const response = await changeStatus(personalId, value);
+    if (response === 200) {
+      toast.success("Estado actualizado correctamente");
+    } else {
+      toast.error("Error al actualizar el estado");
+    }
+  };
+
   return (
     <div className="w-full h-fit flex flex-row">
       <div className="w-1/2 h-96 p-8">
@@ -145,6 +173,8 @@ export default function AssistanceSection({
           personalId={personalId}
           handleNew={handleNewSchedule}
           selectRow={selectRowSchedule}
+          changeStatus={handleChangeStatus}
+          defaultStatus={isActived}
         />
         <DeleteAlertDialog
           open={openScheduleDelete}
