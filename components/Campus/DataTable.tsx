@@ -76,6 +76,9 @@ export function DataTable<TData, TValue>({
         // console.log("id >> ", id);
         selectRow && selectRow(id);
       },
+      handleDelete: (id: number) => {},
+      handleDownload: (id: string) => {},
+      handleViewFile: (id: number) => {},
     },
   });
 

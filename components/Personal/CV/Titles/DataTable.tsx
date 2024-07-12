@@ -94,6 +94,15 @@ export function DataTable<TData, TValue>({
       selectRow: (id: number) => {
         selectRow && selectRow(id);
       },
+      handleDelete: (id: number) => {
+        // handleDelete && handleDelete(id);
+      },
+      handleDownload: (id: string) => {
+        // handleDownload && handleDownload(id);
+      },
+      handleViewFile: (id: number) => {
+        // handleViewFile && handleViewFile(id);
+      },
     },
   });
 
