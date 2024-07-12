@@ -140,7 +140,7 @@ export const columns: ColumnDef<Assistance>[] = [
             : getValue() === 3
             ? "No registrada"
             : getValue() === 5
-            ? "Justificada"
+            ? "Falta"
             : getValue() === 6
             ? "Justificada"
             : "Inconsistencia"}

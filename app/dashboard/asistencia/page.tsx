@@ -88,6 +88,7 @@ export default function Page() {
       const data = await getAssistanceBetweenDates(
         formatDate(date.from),
         formatDate(date.to)
+        
       );
       setData(data);
     } else {
