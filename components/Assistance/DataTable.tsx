@@ -73,6 +73,7 @@ interface DataTableProps<TData, TValue> {
   setDate: (date: DateRange | undefined) => void;
   date: DateRange | undefined;
   handleAssistanceForm?: () => void;
+  isLoading?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -88,6 +89,7 @@ export function DataTable<TData, TValue>({
   setDate,
   date,
   handleAssistanceForm,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -226,7 +228,12 @@ export function DataTable<TData, TValue>({
             <Label htmlFor="airplane-mode">Asistencia no presencial: </Label>
             <Switch checked={checked} onCheckedChange={handleChecked} />
           </div>
-          <Button variant={"secondary"} size={"icon"} onClick={handleSync}>
+          <Button
+            variant={"secondary"}
+            size={"icon"}
+            onClick={handleSync}
+            disabled={isLoading}
+          >
             <RefreshCw className="h-6 w-6" />
           </Button>
           <DropdownMenu>

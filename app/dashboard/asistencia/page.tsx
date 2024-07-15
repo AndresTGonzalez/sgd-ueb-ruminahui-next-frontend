@@ -18,6 +18,7 @@ export default function Page() {
   const [data, setData] = useState<Assistance[]>([]);
   const [date, setDate] = useState<DateRange | undefined>();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getAssistances = async () => {
     const { firstDay, lastDay } = getDefaultDates();
@@ -41,6 +42,7 @@ export default function Page() {
   }, []);
 
   const handleSync = async () => {
+    setLoading(true);
     const response = await syncAssistance();
     if (response === 201) {
       toast.success("Sincronización exitosa");
@@ -48,6 +50,10 @@ export default function Page() {
       getAssistances().then((data) => {
         setData(data);
       });
+      setLoading(false);
+    } else {
+      toast.error("Error al sincronizar");
+      setLoading(false);
     }
   };
 
@@ -88,7 +94,6 @@ export default function Page() {
       const data = await getAssistanceBetweenDates(
         formatDate(date.from),
         formatDate(date.to)
-        
       );
       setData(data);
     } else {
@@ -121,6 +126,7 @@ export default function Page() {
           handleFilter={handleFilter}
           setDate={setDate}
           date={date}
+          isLoading={loading}
           handleAssistanceForm={() => setOpen(true)}
         />
       </div>
