@@ -1,4 +1,4 @@
-export const host = process.env.HOST || "http://localhost:8000";
+export const host = process.env.HOST || "http://192.168.3.105:8000";
 
 export const personalEndpoint = `${host}/api/personal`;
 export const campusEndpoint = `${host}/api/campus`;
