@@ -13,6 +13,7 @@ import { Assistance, ManualAssistance } from "@/models/assistance";
 import { toast } from "sonner";
 import { DateRange } from "react-day-picker";
 import { AssistanceForm } from "@/components/Assistance/AssistanceForm";
+import { host } from "@/lib/constants";
 
 export default function Page() {
   const [data, setData] = useState<Assistance[]>([]);
@@ -78,7 +79,7 @@ export default function Page() {
     const formattedFromDate = formatDate(date?.from || firstDay);
     const formattedToDate = formatDate(date?.to || lastDay);
 
-    const url = `http://localhost:8000/api/assistance/generate-excel-report?startDate=${formattedFromDate}&endDate=${formattedToDate}`;
+    const url = `${host}/api/assistance/generate-excel-report?startDate=${formattedFromDate}&endDate=${formattedToDate}`;
 
     // Crear un enlace y simular el clic para descargar el archivo
     const link = document.createElement("a");

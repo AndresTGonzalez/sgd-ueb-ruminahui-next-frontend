@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { DataTable } from "@/components/Personal/DataTable";
 import { columns } from "@/components/Personal/columns";
 import { DeleteAlertDialog } from "@/components/Misc/DeleteAlertDialog";
+import { host } from "@/lib/constants";
 
 async function getData(): Promise<PersonalData[]> {
   return await getEmployees();
@@ -51,7 +52,7 @@ export default function Page() {
   };
 
   const handleReport = () => {
-    const url = "http://localhost:8000/api/personal/generate-excel-report";
+    const url = host + "/api/personal/generate-excel-report";
 
     // Crear un enlace y simular el clic para descargar el archivo
     const link = document.createElement("a");
